@@ -9,9 +9,42 @@ services:
       dockerfile: Dockerfile.netcore
       args:
         PROJECT_NAME: Web
-        CONFIGURATION: Release
     ports:
       - "80:5000"
       - "5000:5000"
     env_file:
       - .env
+  
+  api_tests:
+    image: superpagos_api_ci
+    container_name: "superpagos_api_ci"
+    build:
+      context: .
+      dockerfile: Dockerfile.xunit
+      args:
+        PROJECT_NAME: Web.Tests
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:11
+    container_name: "postgres"
+    restart: unless-stopped
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: sa
+      POSTGRES_DB: superpagos_db
+      POSTGRES_HOST: postgres
+    volumes:
+    - superpagos_data:/var/lib/postgresql/data
+    
+networks:
+  default:
+    external:
+      name: superpagos_network
+
+volumes:
+  superpagos_data:
+    external: true
