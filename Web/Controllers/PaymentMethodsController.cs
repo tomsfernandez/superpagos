@@ -1,7 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Refit;
+using Web.Dto;
 using Web.Model.Domain;
+using Web.Service;
+using static System.Net.HttpStatusCode;
 
 namespace Web.Controllers {
     [Route("api/[controller]")]
@@ -9,38 +17,64 @@ namespace Web.Controllers {
     public class PaymentMethodsController : ControllerBase {
 
         private AppDbContext Context { get; }
+        private ProviderApiFactory ProviderApiFactory { get; }
 
-        public PaymentMethodsController(AppDbContext context) {
+        public PaymentMethodsController(AppDbContext context, ProviderApiFactory factory) {
             Context = context;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get() {
-            var users = await Context.Users.ToListAsync();
-            return Ok(users);
+            ProviderApiFactory = factory;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id) {
-            var user = await Context.Users.FindAsync(id);
-            if (user == null) return NotFound();
-            return Ok();
+
+        public async Task<IActionResult> Get(long id) {
+            var methods = await Context.PaymentMethods
+                .Where(x => x.User.Id.Equals(id))
+                .ToListAsync();
+            return Ok(methods);
         }
 
+        // todo: Add circuit breaker
+        // todo: Add api stub for unit testing
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User user) {
-            await Context.Users.AddAsync(user);
-            await Context.SaveChangesAsync();
-            return Ok(user);
+        public async Task<IActionResult> Post([FromBody] PaymentMethodPayload payload) {
+            var errors = ValidateAssociationPayload(payload);
+            if (errors.Count > 0) return BadRequest(errors);
+            var provider = Context.Providers.Single(x => x.Code.Equals(payload.ProviderCode));
+            var endpoint = provider.EndPoint;
+            var confirmationPayload = CreateConfirmationPayload(payload);
+            var api = ProviderApiFactory.Create(endpoint);
+            var result = await api.AssociateAccount(confirmationPayload);
+            if (!result.StatusCode.Equals(OK)) return result;
+            var user = Context.Users.Find(payload.UserId);
+            var paymentMethod = new PaymentMethod {
+                CreationTimestamp = DateTime.Now,
+                Provider = provider,
+                User = user,
+                Token = confirmationPayload.AssociationToken
+            };
+            Context.PaymentMethods.Add(paymentMethod);
+            Context.SaveChanges();
+            return result;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] User user) {
-            var userExists = await Context.Users.AnyAsync(x => x.Id.Equals(id));
-            if (!userExists) return NotFound();
-            Context.Update(user);
-            Context.SaveChanges();
-            return Ok(user);
+        // todo: Add token confection
+        private PaymentMethodConfirmation CreateConfirmationPayload(PaymentMethodPayload payload) {
+            var token = "aToken";
+            return new PaymentMethodConfirmation {
+                AssociationToken = token,
+                OperationTokenFromProvider = payload.OperationTokenFromProvider
+            };
+        }
+
+        private List<string> ValidateAssociationPayload(PaymentMethodPayload payload) {
+            var errors = new List<string>();
+            if(!Context.Users.Any(x => x.Id.Equals(payload.UserId))) 
+                errors.Add($"User with id {payload.UserId} doesnt exist");
+            if(!Context.Providers.Any(x => x.Code.Equals(payload.ProviderCode)))
+                errors.Add($"Provider with code {payload.ProviderCode} doesnt exist");
+            if(string.IsNullOrEmpty(payload.OperationTokenFromProvider))
+                errors.Add("The Operation Token is null or empty");
+            return errors;
         }
 
         [HttpDelete("{id}")]
