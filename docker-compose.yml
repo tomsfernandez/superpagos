@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  api:
+    image: superpagos_api
+    container_name: 'superpagos_api'
+    build:
+      context: .
+      dockerfile: Dockerfile.netcore
+      args:
+        PROJECT_NAME: Web
+        CONFIGURATION: Release
+    ports:
+      - "80:5000"
+      - "5000:5000"
+    env_file:
+      - .env
