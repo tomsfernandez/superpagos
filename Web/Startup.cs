@@ -10,7 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Web.Model;
 using Web.Service;
+using Web.Service.Email;
+using Web.Service.Provider;
 
 namespace Web {
     public class Startup {
@@ -53,6 +56,8 @@ namespace Web {
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
             services.AddScoped<ProviderApiFactory>(provider => new RefitProviderApiFactory());
+            var sendGridApiKey = Configuration["SendGridApiKey"];
+            services.AddScoped<EmailSender>(provider => new SendGridEmailSender(sendGridApiKey));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Web.Dto;
+using Web.Model.KeyBuilder;
 
 namespace Web.Controllers {
     [Route("api/[controller]")]
@@ -19,6 +20,7 @@ namespace Web.Controllers {
         private string SecurityKey { get; }
         private long LongLivedTokenTimeInSeconds { get; }
         private long ShortLivedTokenTimeInSeconds { get; }
+        private TokenKeyBuilder SecurityKeyBuilder { get; }
 
         public AuthenticationController(AppDbContext context, IConfiguration config) {
             Context = context;
@@ -26,6 +28,7 @@ namespace Web.Controllers {
             SecurityKey = Config["AuthenticationKey"] ?? "The little brown fox jumps over the lazy dog";
             LongLivedTokenTimeInSeconds = 60 * 60 * 24 * 5;
             ShortLivedTokenTimeInSeconds = 60 * 60 * 1;
+            SecurityKeyBuilder = new SimpleKeyBuilder(SecurityKey);
         }
 
         [AllowAnonymous]
@@ -35,20 +38,20 @@ namespace Web.Controllers {
             var user = Context.Users.Single(x => x.Email.Equals(credentials.Email) 
                                                  && x.Password.Equals(encryptedPassword));
             if (user == null) return Unauthorized();
-            var longLivedToken = BuildToken(SecurityKey, DateTime.Now.AddSeconds(LongLivedTokenTimeInSeconds));
-            var shortLivedToken = BuildToken(SecurityKey, DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds));
+            var longLivedToken = BuildToken(DateTime.Now.AddSeconds(LongLivedTokenTimeInSeconds));
+            var shortLivedToken = BuildToken(DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds));
             return Ok(new {LongLivedToken = longLivedToken, ShortLivedToken = shortLivedToken});
         }
 
         [HttpPost("renew")]
         [Authorize]
         public IActionResult RenewToken() {
-            var newToken = BuildToken(SecurityKey, DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds));
+            var newToken = BuildToken(DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds));
             return Ok(new {Token = newToken});
         }
 
-        public string BuildToken(string key, DateTime expirationDate) {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        public string BuildToken(DateTime expirationDate) {
+            var securityKey = SecurityKeyBuilder.BuildKey();
             var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var tokenDescriptor = new SecurityTokenDescriptor {
                 Expires = expirationDate,

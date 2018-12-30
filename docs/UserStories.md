@@ -109,8 +109,8 @@ Por cada medio de pago asociado se debe mostrar el nombre dado por el usuario, l
 
 ## US - 05: Realización de un pago
     
-**Como** usuario logueado
-**Quiero** realizar un pago a un medio de pago de otra cuenta
+**Como** usuario logueado \
+**Quiero** realizar un pago a un medio de pago de otra cuenta \
 **Para** transferir dinero a otro usuario.
 
 **Aclaraciones**: el usuario deberá seleccionar el medio de pago origen, la cuenta al que se le quiere hace el pago y el monto a pagar.
@@ -154,7 +154,7 @@ La información debe estar ordenada por fecha empezando desde la más reciente. 
 2. UAT - 02: El usuario recibe el dinero de un pago. 
    - Idem UAT-01 pero el usuario no hace la transacción.
 
-## US - 07: Logout
+## US-07: Logout
 
 **Como** usuario logueado
 **Quiero** desloguearme de la aplicación
@@ -165,3 +165,14 @@ La información debe estar ordenada por fecha empezando desde la más reciente. 
    - El usuario le indica al sistema que quiere hacer un logout
    - El sistema redirige al usuario hacia la landing page.
 
+## US-08: Seguridad en contraseña
+
+**Como** security lead \
+**Quiero** hashear los passwords con PBKDF2 \
+**Para** evitar conocer las passwords de los usuarios
+
+## US-09: Seguridad de contraseña de usuario en API
+
+**Como** security lead \
+**Quiero** que no se devuelva un usuario con su password encriptada \
+**Para** no divulgar la encriptación del password del usuario

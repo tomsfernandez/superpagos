@@ -1,8 +1,10 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dto;
+using Web.Service;
+using Web.Service.Provider;
 
-namespace Web.Service {
+namespace Web.Tests.Service {
     public class StubProviderApiFactory : ProviderApiFactory{
 
         private Func<PaymentMethodConfirmation, ObjectResult> ActionToPerform { get; }

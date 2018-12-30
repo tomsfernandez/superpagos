@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Refit;
 using Web.Dto;
 
-namespace Web.Service {
+namespace Web.Service.Provider {
     public interface ProviderApi {
 
         [Post("/")]

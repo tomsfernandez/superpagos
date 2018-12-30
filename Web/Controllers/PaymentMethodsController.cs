@@ -9,6 +9,7 @@ using Refit;
 using Web.Dto;
 using Web.Model.Domain;
 using Web.Service;
+using Web.Service.Provider;
 using static System.Net.HttpStatusCode;
 
 namespace Web.Controllers {

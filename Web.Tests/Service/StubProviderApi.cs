@@ -2,8 +2,10 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dto;
+using Web.Service;
+using Web.Service.Provider;
 
-namespace Web.Service {
+namespace Web.Tests.Service {
     public class StubProviderApi : ProviderApi{
         
         private Func<PaymentMethodConfirmation, ObjectResult> ActionToPerform { get; set; }

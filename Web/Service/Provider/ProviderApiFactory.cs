@@ -1,4 +1,4 @@
-namespace Web.Service {
+namespace Web.Service.Provider {
     public interface ProviderApiFactory {
 
         ProviderApi Create(string endpoint);
