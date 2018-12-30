@@ -33,7 +33,7 @@ namespace Web.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> SendResetToken([FromBody] string email) {
-            var user = await Context.Users.SingleAsync(x => x.Email.Equals(email));
+            var user = Context.Users.SingleOrDefault(x => x.Email.Equals(email));
             if (user == null) return Ok();
             var keyBuilder = new PasswordRecoveryKeyBuilder(user);
             var token = BuildToken(DateTime.Now.AddMinutes(MinutesToRecoverPassword), keyBuilder);

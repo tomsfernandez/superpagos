@@ -33,22 +33,7 @@
 
 **Aclaraciones**: los datos a pedir son: nombre, email y contraseña. La dirección de email no podrá repetirse entre usuarios
 **UATs**
-1. UAT - 01: Registro exitoso
-   - El usuario no registrados solicita registrarse en la plataforma
-   - El usuario entra los datos requeridos
-   - El sistema verifica los datos ingresados y registra al usuario
-2. UAT - 02: Registro fallido por email inválido
-   - El usuario no registrados solicita registrarse en la plataforma
-   - El usuario entra los datos requeridos usando un email inválido
-   - El sistema detecta que el email no es válido y notifica al usuario
-3. UAT - 03: Registro fallido por email repetido
-   - El usuario no registrados solicita registrarse en la plataforma
-   - El usuario entra los datos requeridos usando un email repetido
-   - El sistema detecta que el email no es válido y notifica al usuario
-4. UAT - 04: Registro fallido por falta de datos
-   - El usuario no registrados solicita registrarse en la plataforma
-   - El usuario no entra al menos uno de los datos pedidos
-   - El sistema detecta que faltan datos y notifica al usuario.
+
   
 ## US-03: Login a Superpagos
 
