@@ -2,3 +2,4 @@ bin
 obj
 Properties
 Web.csproj.user
+appsettings.private.json

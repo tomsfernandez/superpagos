@@ -176,3 +176,9 @@ La información debe estar ordenada por fecha empezando desde la más reciente. 
 **Como** security lead \
 **Quiero** que no se devuelva un usuario con su password encriptada \
 **Para** no divulgar la encriptación del password del usuario
+
+## US-10: Autenticación y Autorización
+
+**Como** usuario de Superpagos \
+**Quiero** que mi información sea privada a mí \
+**Para** que solo yo pueda efectuar transacciones y ver mi información

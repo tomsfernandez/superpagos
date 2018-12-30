@@ -1,13 +1,16 @@
 using System;
+using System.Data.Entity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Web.Dto;
+using Web.Model;
 using Web.Model.KeyBuilder;
 
 namespace Web.Controllers {
@@ -21,6 +24,7 @@ namespace Web.Controllers {
         private long LongLivedTokenTimeInSeconds { get; }
         private long ShortLivedTokenTimeInSeconds { get; }
         private TokenKeyBuilder SecurityKeyBuilder { get; }
+        private PasswordEncrypter PasswordEncrypter { get; }
 
         public AuthenticationController(AppDbContext context, IConfiguration config) {
             Context = context;
@@ -29,18 +33,19 @@ namespace Web.Controllers {
             LongLivedTokenTimeInSeconds = 60 * 60 * 24 * 5;
             ShortLivedTokenTimeInSeconds = 60 * 60 * 1;
             SecurityKeyBuilder = new SimpleKeyBuilder(SecurityKey);
+            PasswordEncrypter = new PasswordEncrypter(Config["EncryptionSalt"]);
         }
 
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login([FromBody] LoginCredentials credentials) {
-            var encryptedPassword = credentials.Password;
-            var user = Context.Users.Single(x => x.Email.Equals(credentials.Email) 
+            var encryptedPassword = PasswordEncrypter.Encrypt(credentials.Password);
+            var user = Context.Users.SingleOrDefault(x => x.Email.Equals(credentials.Email) 
                                                  && x.Password.Equals(encryptedPassword));
             if (user == null) return Unauthorized();
             var longLivedToken = BuildToken(DateTime.Now.AddSeconds(LongLivedTokenTimeInSeconds));
             var shortLivedToken = BuildToken(DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds));
-            return Ok(new {LongLivedToken = longLivedToken, ShortLivedToken = shortLivedToken});
+            return Ok(new LoginTokens{LongLivedToken = longLivedToken, ShortLivedToken = shortLivedToken});
         }
 
         [HttpPost("renew")]

@@ -14,9 +14,6 @@ namespace Web.Model {
         
         public string Encrypt(string password) {
             var salt = Encoding.UTF8.GetBytes(Salt);
-            using (var rng = RandomNumberGenerator.Create()) {
-                rng.GetBytes(salt);
-            }
             // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
