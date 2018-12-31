@@ -35,10 +35,24 @@ services:
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: sa
-      POSTGRES_DB: superpagos_db
+      POSTGRES_DB: superpagos
       POSTGRES_HOST: postgres
     volumes:
     - superpagos_data:/var/lib/postgresql/data
+    
+  postgres_hangfire:
+    image: postgres:11
+    container_name: "postgres_hangfire"
+    restart: unless-stopped
+    ports:
+    - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: sa
+      POSTGRES_DB: hangfire
+      POSTGRES_HOST: postgres_hangfire
+    volumes:
+    - hangfire_data:/var/lib/postgresql/data  
     
 networks:
   default:
@@ -47,4 +61,6 @@ networks:
 
 volumes:
   superpagos_data:
+    external: true
+  hangfire_data:
     external: true

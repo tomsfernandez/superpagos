@@ -24,6 +24,8 @@ ProjectSection(SolutionItems) = preProject
 	docs\Workflow vinculacion - Medio de pago.jpg = docs\Workflow vinculacion - Medio de pago.jpg
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scheduler", "Scheduler\Scheduler.csproj", "{03673E68-56EB-4A84-802A-2DEC375E7D4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +40,9 @@ Global
 		{37A154B8-BE1B-4F89-A8AB-B0F535E06496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37A154B8-BE1B-4F89-A8AB-B0F535E06496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37A154B8-BE1B-4F89-A8AB-B0F535E06496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03673E68-56EB-4A84-802A-2DEC375E7D4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03673E68-56EB-4A84-802A-2DEC375E7D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03673E68-56EB-4A84-802A-2DEC375E7D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03673E68-56EB-4A84-802A-2DEC375E7D4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

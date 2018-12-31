@@ -9,5 +9,6 @@ namespace Web {
         public DbSet<User> Users { get; set; }
         public DbSet<Provider> Providers { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<PaymentButton> PaymentButtons { get; set; }
     }
 }
