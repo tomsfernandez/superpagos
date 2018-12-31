@@ -22,6 +22,7 @@ namespace Web.Controllers {
         private IConfiguration Config { get; }
         private int MinutesToRecoverPassword { get; }
         private EmailSender EmailSender { get; }
+        private JwtTokenStore TokenStore { get; }
 
         public PasswordRecoveryController(AppDbContext context, IConfiguration config, EmailSender sender) {
             Context = context;
@@ -29,6 +30,7 @@ namespace Web.Controllers {
             PasswordEncrypter = new PasswordEncrypter(Config["EncryptionSalt"]);
             MinutesToRecoverPassword = 5;
             EmailSender = sender;
+            TokenStore = new JwtTokenStore();
         }
 
         [HttpPost]
@@ -36,7 +38,7 @@ namespace Web.Controllers {
             var user = Context.Users.SingleOrDefault(x => x.Email.Equals(email));
             if (user == null) return Ok();
             var keyBuilder = new PasswordRecoveryKeyBuilder(user);
-            var token = BuildToken(DateTime.Now.AddMinutes(MinutesToRecoverPassword), keyBuilder);
+            var token = TokenStore.GiveToken(DateTime.Now.AddMinutes(MinutesToRecoverPassword), keyBuilder);
             var urlCallback = $"/{user.Id}/{token}";
             await EmailSender.Send(email,"tomas.martinez@ing.austral.edu.ar","Superpagos - Recuperación de contraseña", urlCallback);
             return Ok(urlCallback);
@@ -50,40 +52,12 @@ namespace Web.Controllers {
             if (user == null) errors.Add("El usuario en el token no existe");
             if (errors.Any()) return BadRequest(errors);
             var keyBuilder = new PasswordRecoveryKeyBuilder(user);
-            var jwtDecodeErrors = IsTokenValid(credential.Token, keyBuilder);
+            var jwtDecodeErrors = TokenStore.IsTokenValid(credential.Token, keyBuilder);
             if (jwtDecodeErrors.Count > 0) return BadRequest(jwtDecodeErrors);
             user.Password = PasswordEncrypter.Encrypt(credential.Password);
             Context.Users.Update(user);
             await Context.SaveChangesAsync();
             return Ok();
-        }
-
-        public List<string> IsTokenValid(string token, TokenKeyBuilder keyBuilder) {
-            var key = keyBuilder.BuildKey();
-            var handler = new JwtSecurityTokenHandler();
-            var validations = new TokenValidationParameters {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = key,
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
-            return TokenDecodeExceptionHandler.HandleJwtDecode(() => {
-                handler.ValidateToken(token, validations, out var securityToken);
-            });
-        }
-
-        public string BuildToken(DateTime expirationDate, TokenKeyBuilder builder) {
-            var securityKey = builder.BuildKey();
-            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var tokenDescriptor = new SecurityTokenDescriptor {
-                Expires = expirationDate,
-                NotBefore = DateTime.Now,
-                IssuedAt = DateTime.Now,
-                SigningCredentials = creds
-            };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
     }
 }

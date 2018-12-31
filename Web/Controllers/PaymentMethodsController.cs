@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Web.Model.Domain;
 using Web.Service;
 using Web.Service.Provider;
 using static System.Net.HttpStatusCode;
+using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Web.Controllers {
     [Route("api/[controller]")]
@@ -26,7 +28,6 @@ namespace Web.Controllers {
         }
 
         [HttpGet("{id}")]
-
         public async Task<IActionResult> Get(long id) {
             var methods = await Context.PaymentMethods
                 .Where(x => x.User.Id.Equals(id))
@@ -35,7 +36,6 @@ namespace Web.Controllers {
         }
 
         // todo: Add circuit breaker
-        // todo: Add api stub for unit testing
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PaymentMethodPayload payload) {
             var errors = ValidateAssociationPayload(payload);
@@ -45,7 +45,7 @@ namespace Web.Controllers {
             var confirmationPayload = CreateConfirmationPayload(payload);
             var api = ProviderApiFactory.Create(endpoint);
             var result = await api.AssociateAccount(confirmationPayload);
-            if (!result.StatusCode.Equals(OK)) return result;
+            if (!result.StatusCode.Equals(Status200OK)) return result;
             var user = Context.Users.Find(payload.UserId);
             var paymentMethod = new PaymentMethod {
                 CreationTimestamp = DateTime.Now,

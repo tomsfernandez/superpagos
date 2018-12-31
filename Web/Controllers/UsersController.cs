@@ -39,7 +39,7 @@ namespace Web.Controllers {
         public async Task<IActionResult> Get(int id) {
             var user = await Context.Users.FindAsync(id);
             if (user == null) return NotFound();
-            return Ok();
+            return Ok(user);
         }
 
         [HttpPost, AllowAnonymous]
@@ -72,7 +72,6 @@ namespace Web.Controllers {
             catch (FormatException) {
                 return false;
             }
-
         }
     }
 }

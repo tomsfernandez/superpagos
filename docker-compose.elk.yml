@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  elasticsearch:
+    container_name: 'elasticsearch'
+    image: elasticsearch:6.5.4
+    ports:
+    - "9200:9200"
+    - "9300:9300"
+
+  kibana:
+    container_name: 'kibana'
+    image: kibana:6.5.4
+    ports:
+    - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+
+  heartbeat:
+    image: heartbeat:6.5.4
+    container_name: 'heartbeat'
+    build:
+      context: .
+      dockerfile: Dockerfile.heartbeat
+
+  heartbeat_kibana_update:
+    image: heartbeat:6.5.4
+    container_name: 'heartbeat_kibana_update'
+    build:
+      context: .
+      dockerfile: Dockerfile.heartbeat
+    environment:
+      output.elasticsearch.hosts: "http://elasticsearch:9200"
+      setup.kibana.host: "kibana:5601"
+    command: setup --dashboards
+
+networks:
+  default:
+    external:
+      name: superpagos_network

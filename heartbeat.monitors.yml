@@ -1,0 +1,7 @@
+heartbeat.monitors:
+- type: http
+  schedule: '@every 5s'
+  urls: ["http://192.168.1.110:5000/api/health"]
+- type: tcp
+  schedule: '@every 5s'
+  hosts: ["elasticsearch:9200"]

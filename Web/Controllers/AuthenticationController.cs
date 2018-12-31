@@ -25,6 +25,7 @@ namespace Web.Controllers {
         private long ShortLivedTokenTimeInSeconds { get; }
         private TokenKeyBuilder SecurityKeyBuilder { get; }
         private PasswordEncrypter PasswordEncrypter { get; }
+        private JwtTokenStore TokenStore { get; }
 
         public AuthenticationController(AppDbContext context, IConfiguration config) {
             Context = context;
@@ -34,6 +35,7 @@ namespace Web.Controllers {
             ShortLivedTokenTimeInSeconds = 60 * 60 * 1;
             SecurityKeyBuilder = new SimpleKeyBuilder(SecurityKey);
             PasswordEncrypter = new PasswordEncrypter(Config["EncryptionSalt"]);
+            TokenStore = new JwtTokenStore();
         }
 
         [AllowAnonymous]
@@ -43,30 +45,16 @@ namespace Web.Controllers {
             var user = Context.Users.SingleOrDefault(x => x.Email.Equals(credentials.Email) 
                                                  && x.Password.Equals(encryptedPassword));
             if (user == null) return Unauthorized();
-            var longLivedToken = BuildToken(DateTime.Now.AddSeconds(LongLivedTokenTimeInSeconds));
-            var shortLivedToken = BuildToken(DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds));
+            var longLivedToken = TokenStore.GiveToken(DateTime.Now.AddSeconds(LongLivedTokenTimeInSeconds), SecurityKeyBuilder);
+            var shortLivedToken = TokenStore.GiveToken(DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds), SecurityKeyBuilder);
             return Ok(new LoginTokens{LongLivedToken = longLivedToken, ShortLivedToken = shortLivedToken});
         }
 
         [HttpPost("renew")]
         [Authorize]
         public IActionResult RenewToken() {
-            var newToken = BuildToken(DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds));
+            var newToken = TokenStore.GiveToken(DateTime.Now.AddSeconds(ShortLivedTokenTimeInSeconds), SecurityKeyBuilder);
             return Ok(new {Token = newToken});
-        }
-
-        public string BuildToken(DateTime expirationDate) {
-            var securityKey = SecurityKeyBuilder.BuildKey();
-            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var tokenDescriptor = new SecurityTokenDescriptor {
-                Expires = expirationDate,
-                NotBefore = DateTime.Now,
-                IssuedAt = DateTime.Now, 
-                SigningCredentials = creds
-            };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
     }
 }
