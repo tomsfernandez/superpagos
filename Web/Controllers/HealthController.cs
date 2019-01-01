@@ -6,7 +6,7 @@ namespace Web.Controllers {
     [ApiController]
     public class HealthController : ControllerBase{
 
-        [HttpGet]
+        [HttpGet("")]
         public IActionResult Get() {
             return Ok();
         }

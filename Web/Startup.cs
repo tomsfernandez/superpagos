@@ -8,8 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Extensions.Logging;
+using NLog.Web;
+using Swashbuckle.AspNetCore.Swagger;
 using Web.Model;
 using Web.Service;
 using Web.Service.Email;
@@ -28,6 +32,7 @@ namespace Web {
                 .AddJsonFile("appsettings.private.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+            env.ConfigureNLog("NLog.config");
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -58,10 +63,13 @@ namespace Web {
             services.AddScoped<ProviderApiFactory>(provider => new RefitProviderApiFactory());
             var sendGridApiKey = Configuration["SendGridApiKey"];
             services.AddScoped<EmailSender>(provider => new SendGridEmailSender(sendGridApiKey));
+            services.AddLogging();
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "Superpagos API", Version = "v1"}); });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
@@ -69,9 +77,29 @@ namespace Web {
                 app.UseHsts();
             }
 
+            loggerFactory.AddConsole(Configuration.GetSection("Logging")); //log levels set in your configuration
+            loggerFactory.AddDebug();
+            loggerFactory.AddNLog();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
             app.UseCors();
             app.UseAuthentication();
             app.UseMvc();
+        }
+    }
+
+    public class ConsoleLogger : ILogger<ConsoleLogger> {
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
+            Func<TState, Exception, string> formatter) {
+            Console.WriteLine(formatter.Invoke(state, exception));
+        }
+
+        public bool IsEnabled(LogLevel logLevel) {
+            throw new NotImplementedException();
+        }
+
+        public IDisposable BeginScope<TState>(TState state) {
+            throw new NotImplementedException();
         }
     }
 }

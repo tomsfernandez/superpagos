@@ -16,7 +16,7 @@ namespace Web.Controllers {
             ProviderToken = Configuration["FakeProviderToken"];
         }
 
-        [HttpPost]
+        [HttpPost("")]
         public IActionResult LinkWithSuperpagos(PaymentMethodConfirmation dto) {
             if (ProviderToken.Equals(dto.OperationTokenFromProvider)) return Ok();
             return Forbid();

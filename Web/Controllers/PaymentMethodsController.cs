@@ -36,7 +36,7 @@ namespace Web.Controllers {
         }
 
         // todo: Add circuit breaker
-        [HttpPost]
+        [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] PaymentMethodPayload payload) {
             var errors = ValidateAssociationPayload(payload);
             if (errors.Count > 0) return BadRequest(errors);

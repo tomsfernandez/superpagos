@@ -9,6 +9,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace Web {
     public class Program {
@@ -31,6 +32,7 @@ namespace Web {
                 .UseStartup<Startup>()
                 .UseSetting("detailedErrors", "true")
                 .CaptureStartupErrors(true)
+                .UseNLog()
                 .Build();
     }
 }

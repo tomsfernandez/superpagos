@@ -21,7 +21,7 @@ namespace Web.Controllers {
             Context = context;
         }
 
-        [HttpGet]
+        [HttpGet("")]
         public async Task<IActionResult> Get() {
             var providers = await Context.Providers.ToListAsync();
             return Ok(providers);
@@ -34,7 +34,7 @@ namespace Web.Controllers {
             return Ok(provider);
         }
 
-        [HttpPost]
+        [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] ProviderDto dto) {
             var errors = dto.Validate();
             if (!Context.Providers.Any(x => x.Code.Equals(dto.Code))) errors.Add("Code ya está en uso");

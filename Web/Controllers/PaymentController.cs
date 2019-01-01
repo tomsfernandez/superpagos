@@ -14,15 +14,16 @@ namespace Web.Controllers {
         public PaymentController(AppDbContext context) {
             Context = context;
         }
-
+        
+        [HttpPost("")]
         public IActionResult MakePayment([FromBody] PaymentDto dto) {
             var errors = dto.Validate(Context);
             var messages = MakeMessages(dto);
             return Ok();
         }
 
-        private List<PaymentMessage> MakeMessages(PaymentDto dto) {
-            return new List<PaymentMessage>();
+        private List<StartPaymentMessage> MakeMessages(PaymentDto dto) {
+            return new List<StartPaymentMessage>();
         }
     }
 }

@@ -45,7 +45,8 @@ namespace Web.Tests.UseCases {
         [Fact]
         public async void test_01_juancito_resets_password() {
             await RegisterJaimito();
-            var result = await RecoveryController.SendResetToken(Jaimito.Email) as ObjectResult;
+            var resetToken = new ResetTokenDto {Email = Jaimito.Email};
+            var result = await RecoveryController.SendResetToken(resetToken) as ObjectResult;
             var url = result.Value as string;
             url.Should().NotBeNullOrEmpty();
             var credentials = GetCredentialsFrom(url, "aDifferentPassword");
@@ -60,7 +61,8 @@ namespace Web.Tests.UseCases {
         [Fact]
         public async void test_02_that_non_existant_email_returns_ok_without_url() {
             await RegisterJaimito();
-            var result = await RecoveryController.SendResetToken("aDifferentEmail@hotmail.com") as OkResult;
+            var resetToken = new ResetTokenDto {Email = "aDifferentEmail@hotmail.com"};
+            var result = await RecoveryController.SendResetToken(resetToken) as OkResult;
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(200);
         }
@@ -72,8 +74,9 @@ namespace Web.Tests.UseCases {
             var emailSender = new StubEmailSender(() => {
                 executedEmailSending = true;
             });
+            var resetToken = new ResetTokenDto {Email = "aDifferentEmail"};
             var controller = new PasswordRecoveryController(Context, Config, emailSender);
-            var result = await controller.SendResetToken("aDifferentEmail") as OkResult;
+            var result = await controller.SendResetToken(resetToken) as OkResult;
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(200);
             executedEmailSending.Should().BeFalse();

@@ -39,7 +39,7 @@ namespace Web.Controllers {
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("")]
         public IActionResult Login([FromBody] LoginCredentials credentials) {
             var encryptedPassword = PasswordEncrypter.Encrypt(credentials.Password);
             var user = Context.Users.SingleOrDefault(x => x.Email.Equals(credentials.Email) 

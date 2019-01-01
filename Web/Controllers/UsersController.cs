@@ -29,7 +29,7 @@ namespace Web.Controllers {
             PasswordEncrypter = new PasswordEncrypter(Config["EncryptionSalt"]);
         }
 
-        [HttpGet]
+        [HttpGet("")]
         public async Task<IActionResult> Get() {
             var users = await Context.Users.ToListAsync();
             return Ok(users);
@@ -42,7 +42,7 @@ namespace Web.Controllers {
             return Ok(user);
         }
 
-        [HttpPost, AllowAnonymous]
+        [HttpPost(""), AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] UserDto dto) {
             var errors = dto.Validate();
             if (Context.Users.Any(x => x.Email.Equals(dto.Email))) errors.Add("Email ya está siendo usado");

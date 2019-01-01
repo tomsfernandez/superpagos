@@ -22,10 +22,30 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.heartbeat
+      
+  filebeat:
+    image: filebeat:6.5.4
+    container_name: 'filebeat'
+    build:
+      context: .
+      dockerfile: Dockerfile.filebeat
+    volumes:
+      - "${PWD}/Web/bin/Debug/netcoreapp2.1/logfile.log:/logfile.log"
 
   heartbeat_kibana_update:
     image: heartbeat:6.5.4
     container_name: 'heartbeat_kibana_update'
+    build:
+      context: .
+      dockerfile: Dockerfile.heartbeat
+    environment:
+      output.elasticsearch.hosts: "http://elasticsearch:9200"
+      setup.kibana.host: "kibana:5601"
+    command: setup --dashboards
+    
+  filebeat_kibana_update:
+    image: filebeat:6.5.4
+    container_name: 'filebeat_kibana_update'
     build:
       context: .
       dockerfile: Dockerfile.heartbeat

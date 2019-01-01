@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers {
     
-    [Route("api/")]
+    [Route("api")]
     [ApiController]
     public class HomeController : ControllerBase{
 
-        [HttpGet]
+        [HttpGet("")]
         public IActionResult Get() {
             return Ok("Welcome to the Superpagos API");
         }

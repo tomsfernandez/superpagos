@@ -33,19 +33,20 @@ namespace Web.Controllers {
             TokenStore = new JwtTokenStore();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SendResetToken([FromBody] string email) {
-            var user = Context.Users.SingleOrDefault(x => x.Email.Equals(email));
+        [HttpPost("")]
+        public async Task<IActionResult> SendResetToken([FromBody] ResetTokenDto dto) {
+            var user = Context.Users.SingleOrDefault(x => x.Email.Equals(dto.Email));
             if (user == null) return Ok();
             var keyBuilder = new PasswordRecoveryKeyBuilder(user);
             var token = TokenStore.GiveToken(DateTime.Now.AddMinutes(MinutesToRecoverPassword), keyBuilder);
             var urlCallback = $"/{user.Id}/{token}";
-            await EmailSender.Send(email,"tomas.martinez@ing.austral.edu.ar","Superpagos - Recuperación de contraseña", urlCallback);
+            await EmailSender.Send(dto.Email,"tomas.martinez@ing.austral.edu.ar",
+                "Superpagos - Recuperación de contraseña", urlCallback);
             return Ok(urlCallback);
         }
 
         // todo: manejar mejor excepciones de jwt al validar el token
-        [HttpPost]
+        [HttpPost("reset")]
         public async Task<IActionResult> ResetPassword([FromBody] RecoveryCredential credential) {
             var errors = credential.Validate();
             var user = await Context.Users.FindAsync(credential.Id);
