@@ -30,7 +30,7 @@ services:
       context: .
       dockerfile: Dockerfile.filebeat
     volumes:
-      - "${PWD}/Web/bin/Debug/netcoreapp2.1/logfile.log:/logfile.log"
+      - "${PWD}/Web/bin/Debug/netcoreapp2.1/logfile.log:/usr/share/filebeat/logfile.log"
 
   heartbeat_kibana_update:
     image: heartbeat:6.5.4
@@ -52,6 +52,8 @@ services:
     environment:
       output.elasticsearch.hosts: "http://elasticsearch:9200"
       setup.kibana.host: "kibana:5601"
+    volumes:
+    - "${PWD}/Web/bin/Debug/netcoreapp2.1/logfile.log:/usr/share/filebeat/logfile.log"
     command: setup --dashboards
 
 networks:

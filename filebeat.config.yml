@@ -1,7 +1,7 @@
 filebeat.inputs:
 - type: log
   paths:
-  - "*"
+  - "/usr/share/filebeat/logfile.log"
   fields_under_root: true
   
 output.elasticsearch:

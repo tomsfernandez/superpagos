@@ -11,7 +11,6 @@ ProjectSection(SolutionItems) = preProject
 	Dockerfile.heartbeat = Dockerfile.heartbeat
 	docker-compose.elk.yml = docker-compose.elk.yml
 	heartbeat.config.yml = heartbeat.config.yml
-	heartbeat.monitors.yml = heartbeat.monitors.yml
 	Dockerfile.filebeat = Dockerfile.filebeat
 	filebeat.config.yml = filebeat.config.yml
 EndProjectSection

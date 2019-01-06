@@ -1,7 +1,7 @@
-heartbeat.config.monitors:
-  path: /usr/share/heartbeat/heartbeat.monitors.yml
-  reload.enabled: true
-  reload.period: 1s
+heartbeat.monitors:
+- type: http
+  schedule: '@every 5s'
+  urls: ["http://www.infobae.com"]
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]

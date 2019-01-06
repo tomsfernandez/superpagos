@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Swashbuckle.AspNetCore.Swagger;
+using Web.Extensions;
 using Web.Model;
 using Web.Service;
 using Web.Service.Email;
@@ -65,7 +66,7 @@ namespace Web {
             services.AddScoped<EmailSender>(provider => new SendGridEmailSender(sendGridApiKey));
             services.AddLogging();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "Superpagos API", Version = "v1"}); });
-            
+            services.AddWebSocketCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,10 +77,14 @@ namespace Web {
             else {
                 app.UseHsts();
             }
+            
+            app.UseWebSockets();
+            app.AddWebSocketHandlerMiddleware("/test", app.ApplicationServices.GetService<EchoWebSocketHandler>());
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging")); //log levels set in your configuration
             loggerFactory.AddDebug();
             loggerFactory.AddNLog();
+            
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
             app.UseCors();
