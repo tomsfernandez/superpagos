@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  locust-master:
+    image: locust-master
+    container_name: "locust-master"
+    build:
+      context: .
+      dockerfile: Dockerfile  
+    ports:
+      - "8089:8089"
+    environment:
+      LOCUST_USERS: LocustUser
+      API_HOST: http://localhost:5000
+      IS_MASTER: "true"
+
+  locust-worker:
+    image: locust-worker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "--master-host=locust-master"
+    environment:
+      LOCUST_USERS: AnswerUploadUser
+      API_HOST: http://ax_censos_cmq_web:5000
+      IS_MASTER: "false"
+      
+networks:
+  default:
+    external:
+      name: locust_network

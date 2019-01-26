@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.2-sdk-alpine AS build-env
+FROM microsoft/dotnet:2.1-sdk-alpine AS build-env
 ARG PROJECT_NAME
 ENV PROJECT_NAME ${PROJECT_NAME} 
 WORKDIR /app

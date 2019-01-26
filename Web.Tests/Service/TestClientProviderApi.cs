@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Web.Dto;
+using Web.Model;
 using Web.Service.Provider;
 
 namespace Web.Tests.Service {
@@ -30,6 +31,14 @@ namespace Web.Tests.Service {
         private StringContent GetStringContent<T>(T contentAsObject) {
             return new StringContent(JsonConvert.SerializeObject(contentAsObject), Encoding.UTF8,
                 "application/json");
+        }
+
+        public Task<ObjectResult> Pay(StartPaymentMessage message) {
+            throw new NotImplementedException();
+        }
+
+        public Task<ObjectResult> Rollback(RollbackMessage message) {
+            throw new NotImplementedException();
         }
     }
 }

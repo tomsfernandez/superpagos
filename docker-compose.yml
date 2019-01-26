@@ -14,17 +14,38 @@ services:
       - "5000:5000"
     env_file:
       - .env
-  
-  api_tests:
-    image: superpagos_api_ci
-    container_name: "superpagos_api_ci"
+      
+  scheduler:
+    image: scheduler
+    container_name: "superpagos_scheduler"
     build:
       context: .
-      dockerfile: Dockerfile.xunit
       args:
-        PROJECT_NAME: Web.Tests
-    env_file:
-      - .env
+      - PROJECT_NAME=Scheduler
+      - CONFIGURATION=Release
+      dockerfile: Dockerfile.netcore
+    ports:
+    - "8080:5000"
+    environment:
+      HangfireConnection: Server=postgres;Database=hangfire;User Id=sa;Password=password;Port=5432;
+    env_file: .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/hangfire"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  migrations:
+    image: api_migrations
+    container_name: "api_migrations"
+    build:
+      context: .
+      dockerfile: Dockerfile.migrations
+      args:
+        PROJECT_NAME: Web
+    environment:
+      DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
 
   postgres:
     image: postgres:11

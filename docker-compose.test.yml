@@ -1,0 +1,41 @@
+version: '3.3'
+
+services:
+
+  api_ci:
+    image: api_ci
+    container_name: "api_ci"
+    build:
+      context: .
+      dockerfile: Dockerfile.xunit
+      args:
+        PROJECT_NAME: Web.Tests
+    depends_on:
+      - postgres_ci
+    environment:
+      DefaultConnection: Server=postgres_ci;Database=axum_censos_cmq_dev;User Id=sa;Password=password;Port=5432;  
+    env_file:
+      - .env
+
+  postgres_ci:
+    image: postgres:11
+    container_name: "postgres_ci"
+    restart: unless-stopped
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: sa
+      POSTGRES_DB: superpagos
+      POSTGRES_HOST: postgres
+    volumes:
+    - superpagos_data_test:/var/lib/postgresql/data
+    
+networks:
+  default:
+    external:
+      name: superpagos_network
+
+volumes:
+  superpagos_data_test:
+    external: true

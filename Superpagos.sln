@@ -13,6 +13,9 @@ ProjectSection(SolutionItems) = preProject
 	heartbeat.config.yml = heartbeat.config.yml
 	Dockerfile.filebeat = Dockerfile.filebeat
 	filebeat.config.yml = filebeat.config.yml
+	docker-compose.test.yml = docker-compose.test.yml
+	run-ci.sh = run-ci.sh
+	Dockerfile.migrations = Dockerfile.migrations
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Tests", "Web.Tests\Web.Tests.csproj", "{37A154B8-BE1B-4F89-A8AB-B0F535E06496}"
@@ -26,6 +29,10 @@ ProjectSection(SolutionItems) = preProject
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scheduler", "Scheduler\Scheduler.csproj", "{03673E68-56EB-4A84-802A-2DEC375E7D4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Performance", "Performance\Performance.csproj", "{5BD0F063-5087-47CF-85CF-821C2AC69027}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisaApi", "VisaApi\VisaApi.csproj", "{D4A96246-B666-4A14-B42D-A79DFF15C1AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,5 +52,13 @@ Global
 		{03673E68-56EB-4A84-802A-2DEC375E7D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03673E68-56EB-4A84-802A-2DEC375E7D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03673E68-56EB-4A84-802A-2DEC375E7D4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD0F063-5087-47CF-85CF-821C2AC69027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD0F063-5087-47CF-85CF-821C2AC69027}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD0F063-5087-47CF-85CF-821C2AC69027}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD0F063-5087-47CF-85CF-821C2AC69027}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A96246-B666-4A14-B42D-A79DFF15C1AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A96246-B666-4A14-B42D-A79DFF15C1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A96246-B666-4A14-B42D-A79DFF15C1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A96246-B666-4A14-B42D-A79DFF15C1AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

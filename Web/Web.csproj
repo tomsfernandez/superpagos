@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Folder Include="Data\Queries" />
         <Folder Include="wwwroot\" />
     </ItemGroup>
 
@@ -46,6 +47,9 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL">
           <Version>2.1.2</Version>
+        </PackageReference>
+        <PackageReference Include="Polly">
+          <Version>6.1.2</Version>
         </PackageReference>
         <PackageReference Include="Refit">
           <Version>4.6.58</Version>

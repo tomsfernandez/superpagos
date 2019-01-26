@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,9 +38,11 @@ namespace Scheduler {
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            var connectionStrings = Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = Configuration.GetConnectionString("HangfireConnection");
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder<DbCreatorContext>().UseNpgsql(connectionString);
+            using(var context = new DbCreatorContext(dbContextOptionsBuilder.Options))
             services.AddHangfire(config => {
-                config.UsePostgreSqlStorage(connectionStrings);
+                config.UsePostgreSqlStorage(connectionString);
             });
         }
 

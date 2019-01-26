@@ -1,0 +1,8 @@
+FROM microsoft/dotnet:2.1-sdk-alpine
+ARG PROJECT_NAME
+ENV PROJECT_NAME ${PROJECT_NAME} 
+RUN echo ${PROJECT_NAME}
+RUN mkdir /myapp
+WORKDIR /myapp
+COPY . /myapp
+ENTRYPOINT ["sh", "-c", "cd /myapp/$PROJECT_NAME/ && dotnet restore && dotnet ef database update --context AppDbContext"]

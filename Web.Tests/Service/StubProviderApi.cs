@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dto;
+using Web.Model;
 using Web.Service;
 using Web.Service.Provider;
 
@@ -18,6 +19,14 @@ namespace Web.Tests.Service {
             var task = new Task<ObjectResult>(() => ActionToPerform(payload));
             task.Start();
             return task;
+        }
+
+        public Task<ObjectResult> Pay(StartPaymentMessage message) {
+            throw new NotImplementedException();
+        }
+
+        public Task<ObjectResult> Rollback(RollbackMessage message) {
+            throw new NotImplementedException();
         }
     }
 }
