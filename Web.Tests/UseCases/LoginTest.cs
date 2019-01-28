@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Web.Controllers;
 using Web.Dto;
 using Web.Model.Domain;
+using Web.Tests.Helpers;
 using Xunit;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
@@ -25,12 +26,7 @@ namespace Web.Tests.UseCases {
             Mapper = TestHelper.CreateAutoMapper();
             UsersController = new UsersController(Context, Mapper, Config);
             AuthController = new AuthenticationController(Context, Config);
-            Jaimito = new UserDto {
-                Name = "Jaimito Ramón Tercero",
-                Email = "jaimito_ramon@superpagos.com",
-                Password = "un_password_re_seguro",
-                Role = Role.USER
-            };
+            Jaimito = UserFactory.GetJaimitoAsDto();
         }
 
         [Fact]

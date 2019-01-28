@@ -13,8 +13,10 @@ using Web.Controllers;
 using Web.Dto;
 using Web.Model.Domain;
 using Web.Service.Provider;
+using Web.Tests.Helpers;
 using Web.Tests.Service;
 using Xunit;
+using ProviderFactory = Web.Tests.Helpers.ProviderFactory;
 
 namespace Web.Tests.UseCases {
     public class PaymentMethodLinkingTest : IDisposable{
@@ -28,26 +30,17 @@ namespace Web.Tests.UseCases {
         private PaymentMethodsController Controller { get; }
 
         public PaymentMethodLinkingTest() {
-            Jaimito = new User {
-                Name = "Jaimito Ramón Tercero",
-                Email = "jaimito_ramon@superpagos.com",
-                Password = "un_password_re_seguro",
-                Role = Role.USER
-            };
+            Jaimito = UserFactory.GetJaimito();
             Configuration = Startup.Configuration;
             Context = TestHelper.MakeContext();
             VisaProviderToken = Configuration["FakeProviderToken"];
-            VisaProvider = new Provider {
-                Code = "VISA",
-                Company = "Visa",
-                EndPoint = "anEndpoint",
-                Name = "Visa",
-                PaymentEndpoint = "anotherEndpoint"
+            VisaProvider = ProviderFactory.GetVisa();
+            ApiFactory = new StubProviderApiFactory {
+                OnAssociation = conf => {
+                    if (conf.OperationTokenFromProvider.Equals(VisaProviderToken)) return new OkObjectResult("OK");
+                    return new BadRequestObjectResult("BAD_REQUEST");
+                }
             };
-            ApiFactory = new StubProviderApiFactory(conf => {
-                if (conf.OperationTokenFromProvider.Equals(VisaProviderToken)) return new OkObjectResult("OK");
-                return new BadRequestObjectResult("BAD_REQUEST");
-            });
             Controller = new PaymentMethodsController(Context, ApiFactory);
         }
 

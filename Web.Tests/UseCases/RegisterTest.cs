@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Web.Controllers;
 using Web.Dto;
 using Web.Model.Domain;
+using Web.Tests.Helpers;
 using Xunit;
 
 namespace Web.Tests.UseCases {
@@ -24,12 +25,7 @@ namespace Web.Tests.UseCases {
             Context = TestHelper.MakeContext();
             Mapper = TestHelper.CreateAutoMapper();
             Controller = new UsersController(Context, Mapper, Config);
-            Jaimito = new UserDto {
-                Name = "Jaimito Ramón Tercero",
-                Email = "jaimito_ramon@superpagos.com",
-                Password = "un_password_re_seguro",
-                Role = Role.USER
-            };
+            Jaimito = UserFactory.GetJaimitoAsDto();
         }
 
         [Fact]
@@ -41,8 +37,7 @@ namespace Web.Tests.UseCases {
         [Fact]
         public async void test_02_juancito_cant_register_because_email_is_taken() {
             await RegisterJaimito();
-            var juancito = new UserDto { Name = "Juancito de la Vega", Email = Jaimito.Email, 
-                Password = "el_zorro_zotudo", Role = Role.USER };
+            var juancito = UserFactory.GetJuancitoAsDto(Jaimito.Email);
             var result = await RegisterJuancito(juancito);
             result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             Context.Users.Count().Should().Be(1);
@@ -51,10 +46,7 @@ namespace Web.Tests.UseCases {
         [Fact]
         public async void test_03_juancito_cant_register_because_email_is_not_valid() {
             await RegisterJaimito();
-            var juancito = new UserDto {
-                Name = "Juancito de la Vega", Email = "turbio./com",
-                Password = "el_zorro_zotudo", Role = Role.USER
-            };
+            var juancito = UserFactory.GetJuancitoAsDto("turbio./com");
             var result = await RegisterJuancito(juancito);
             result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             Context.Users.Count().Should().Be(1);
@@ -62,9 +54,8 @@ namespace Web.Tests.UseCases {
 
         [Fact]
         public async void test_04_juancito_cant_register_because_of_missing_info() {
-            var juancito = new UserDto {
-                Password = "el_zorro_zotudo", Role = Role.USER
-            };
+            var juancito = UserFactory.GetJuancitoAsDto();
+            juancito.Name = "";
             var result = await RegisterJuancito(juancito);
             result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             Context.Users.Count().Should().Be(0);

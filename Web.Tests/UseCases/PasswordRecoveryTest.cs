@@ -11,6 +11,7 @@ using Web.Dto;
 using Web.Model;
 using Web.Model.Domain;
 using Web.Service.Email;
+using Web.Tests.Helpers;
 using Web.Tests.Service;
 using Xunit;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -34,12 +35,7 @@ namespace Web.Tests.UseCases {
             EmailSender = new StubEmailSender(() => new List<object>());
             RecoveryController = new PasswordRecoveryController(Context, Config, EmailSender);
             AuthController = new AuthenticationController(Context, Config);
-            Jaimito = new UserDto {
-                Name = "Jaimito Ramón Tercero",
-                Email = "jaimito_ramon@superpagos.com",
-                Password = "un_password_re_seguro",
-                Role = Role.USER
-            };
+            Jaimito = UserFactory.GetJaimitoAsDto();
         }
 
         [Fact]

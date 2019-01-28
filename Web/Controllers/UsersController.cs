@@ -42,6 +42,7 @@ namespace Web.Controllers {
             return Ok(user);
         }
 
+        // todo: return User without password
         [HttpPost(""), AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] UserDto dto) {
             var errors = dto.Validate();

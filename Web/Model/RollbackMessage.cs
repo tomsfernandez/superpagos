@@ -1,9 +1,13 @@
 using System;
 
-namespace Web.Dto {
+namespace Web.Model {
     public class RollbackMessage {
 
-        public DateTime TimeStamp { get; set; }
-        public string OperationId { get; set; }
+        public DateTime TimeStamp { get; set; } = DateTime.Now;
+        public string OperationId { get; }
+
+        public RollbackMessage(string operationId) {
+            OperationId = operationId;
+        }
     }
 }

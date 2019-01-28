@@ -1,21 +1,45 @@
+using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Polly;
+using Web.Dto;
+using Web.Model;
+using Web.Model.Domain;
+using Web.Service.Provider;
 
 namespace Web.Controllers {
 
     [Route("api/[controller]")]
     [ApiController]
     public class WebHookController : ControllerBase{
-        
-        public WebHookController() { }
+
+        private AppDbContext Context { get; set; }
+        private ProviderApiFactory ProviderApiFactory { get; set; }
+
+        public WebHookController(AppDbContext context, ProviderApiFactory providerApiFactory) {
+            Context = context;
+            ProviderApiFactory = providerApiFactory;
+        }
 
         [HttpPost("/notified")]
-        public async Task<IActionResult> Notified() {
-            // todo: check pending transactions
-            // todo: if transactions so far are okay, update transacction and do nothing
-            // todo: if all transactions are okay, notify with socket
-            // todo: if error, start compensation process por all transactions
-            // todo: sin importar el resultado, si hay una transacción de error y el proceso de compensado no fue iniciado, iniciarlo
+        public async Task<IActionResult> Notify([FromBody] PaymentResponse response) {
+            var movement = await Context.Movements.SingleAsync(x => x.OperationId.Equals(response.OperationId));
+            if (movement == null) return BadRequest($"Operation with id: {response.OperationId} does not exist");
+            var transaction = movement.Transaction;
+            if (response.IsBadRequest() || response.IsError()) {
+                transaction.Movements.ForEach(async x => await x.Rollback(ProviderApiFactory, Context));
+            }
+            else if (response.IsOk()) {
+                movement.Success();
+                Context.Movements.Update(movement);
+            }
+            if (transaction.Movements.Select(x => x.IsSuccesfull).Aggregate(true, (acc, cur) => acc & cur)) {
+                // todo: cortar conexión de socket con OK
+            }
+            await Context.SaveChangesAsync();
             return Ok();
         }
     }

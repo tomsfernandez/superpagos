@@ -11,10 +11,10 @@ namespace Web.Model {
         public DateTime TimeStamp { get; set; }
         public string Token { get; set; }
 
-        public static StartPaymentMessage Build(PaymentMethod method, PaymentDto dto) {
+        public static StartPaymentMessage Build(PaymentMethod method, Operation operationType, double amount) {
             var message = new StartPaymentMessage {
-                Amount = dto.Amount,
-                OperationType = Operation.DEPOSIT,
+                Amount = amount,
+                OperationType = operationType,
                 OperationId = Guid.NewGuid().ToString(),
                 TimeStamp = DateTime.Now,
                 Token = method.Token

@@ -7,26 +7,28 @@ using Web.Service;
 using Web.Service.Provider;
 
 namespace Web.Tests.Service {
-    public class StubProviderApi : ProviderApi{
-        
-        private Func<PaymentMethodConfirmation, ObjectResult> ActionToPerform { get; set; }
+    public class StubProviderApi : ProviderApi {
 
-        public StubProviderApi(Func<PaymentMethodConfirmation, ObjectResult> actionToPerform) {
-            ActionToPerform = actionToPerform;
-        }
+        public Func<PaymentMethodConfirmation, ObjectResult> OnAssociation { get; set; } = dto => throw new Exception();
+        public Func<StartPaymentMessage, ObjectResult> OnPayment { get; set; } = dto => throw new Exception();
+        public Func<RollbackMessage, ObjectResult> OnRollback { get; set; } = dto => throw new Exception();
 
         public Task<ObjectResult> AssociateAccount(PaymentMethodConfirmation payload) {
-            var task = new Task<ObjectResult>(() => ActionToPerform(payload));
+            var task = new Task<ObjectResult>(() => OnAssociation(payload));
             task.Start();
             return task;
         }
 
         public Task<ObjectResult> Pay(StartPaymentMessage message) {
-            throw new NotImplementedException();
+            var task = new Task<ObjectResult>(() => OnPayment(message));
+            task.Start();
+            return task;
         }
 
         public Task<ObjectResult> Rollback(RollbackMessage message) {
-            throw new NotImplementedException();
+            var task = new Task<ObjectResult>(() => OnRollback(message));
+            task.Start();
+            return task;
         }
     }
 }

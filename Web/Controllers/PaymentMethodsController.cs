@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Refit;
 using Web.Dto;
 using Web.Model.Domain;
-using Web.Service;
 using Web.Service.Provider;
-using static System.Net.HttpStatusCode;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Web.Controllers {
@@ -41,7 +36,7 @@ namespace Web.Controllers {
             var errors = ValidateAssociationPayload(payload);
             if (errors.Count > 0) return BadRequest(errors);
             var provider = Context.Providers.Single(x => x.Code.Equals(payload.ProviderCode));
-            var endpoint = provider.EndPoint;
+            var endpoint = provider.RollbackEndPoint;
             var confirmationPayload = CreateConfirmationPayload(payload);
             var api = ProviderApiFactory.Create(endpoint);
             var result = await api.AssociateAccount(confirmationPayload);
