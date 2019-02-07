@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +39,8 @@ namespace Web.Controllers {
             var user = Context.Users.SingleOrDefault(x => x.Email.Equals(dto.Email));
             if (user == null) return Ok();
             var keyBuilder = new PasswordRecoveryKeyBuilder(user);
-            var token = TokenStore.GiveToken(DateTime.Now.AddMinutes(MinutesToRecoverPassword), keyBuilder);
+            var token = TokenStore.GiveToken(DateTime.Now.AddMinutes(MinutesToRecoverPassword), keyBuilder, 
+                new List<Claim>());
             var urlCallback = $"/{user.Id}/{token}";
             await EmailSender.Send(dto.Email,"tomas.martinez@ing.austral.edu.ar",
                 "Superpagos - Recuperación de contraseña", urlCallback);

@@ -37,7 +37,7 @@ namespace Web.Tests.UseCases {
             result.Should().NotBeNull();
             if (result == null) return;
             result.StatusCode.Should().Be(Status200OK);
-            var tokens = result.Value as LoginTokens;
+            var tokens = result.Value as LoginResponse;
             tokens.Should().NotBeNull();
             if (tokens == null) return;
             tokens.LongLivedToken.Should().NotBeNullOrEmpty();

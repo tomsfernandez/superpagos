@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +14,7 @@ using Newtonsoft.Json;
 using Web.Controllers;
 using Web.Dto;
 using Web.Model.Domain;
+using Web.Model.JwtClaim;
 using Web.Service.Provider;
 using Web.Tests.Helpers;
 using Web.Tests.Service;
@@ -41,17 +44,15 @@ namespace Web.Tests.UseCases {
                     return new BadRequestObjectResult("BAD_REQUEST");
                 }
             };
-            Controller = new PaymentMethodsController(Context, ApiFactory);
+            Setup();
+            Controller = new PaymentMethodsController(Context, ApiFactory, GetClaimsExtractorFactoryFor(Jaimito));
         }
 
         [Fact]
         public async void test_01_visa_method_is_linked_succesfully() {
-            Context.Providers.Add(VisaProvider);
-            Context.Users.Add(Jaimito);
-            Context.SaveChanges();
             var paymentMethodPayload = new PaymentMethodPayload {
                 ProviderCode = VisaProvider.Code, 
-                UserId = Jaimito.Id, OperationTokenFromProvider = VisaProviderToken
+                OperationTokenFromProvider = VisaProviderToken
             };
             var linkingResult = await Controller.Post(paymentMethodPayload) as ObjectResult;
             linkingResult.Should().NotBeNull();
@@ -61,16 +62,24 @@ namespace Web.Tests.UseCases {
 
         [Fact]
         public async void test_02_provider_token_is_bogus() {
-            Context.Providers.Add(VisaProvider);
-            Context.Users.Add(Jaimito);
-            Context.SaveChanges();
             var paymentMethodPayload = new PaymentMethodPayload {
                 ProviderCode = "A Bogus Code",
-                UserId = Jaimito.Id, OperationTokenFromProvider = VisaProviderToken
+                OperationTokenFromProvider = VisaProviderToken
             };
             var linkingResult = await Controller.Post(paymentMethodPayload) as ObjectResult;
             linkingResult.Should().NotBeNull();
             linkingResult.StatusCode.Should().Be(400);
+        }
+
+        public ClaimExtractorFactory GetClaimsExtractorFactoryFor(User user) {
+            var idClaim = new Claim(ClaimTypes.Name, user.Id.ToString());
+            return new SameClaimExtractorFactory(new List<Claim>{idClaim});
+        }
+
+        public void Setup() {
+            Context.Providers.Add(VisaProvider);
+            Context.Users.Add(Jaimito);
+            Context.SaveChanges();
         }
 
         public void Dispose() {

@@ -13,8 +13,8 @@ namespace Web.Tests.Service {
         public Func<StartPaymentMessage, ObjectResult> OnPayment { get; set; } = dto => throw new Exception();
         public Func<RollbackMessage, ObjectResult> OnRollback { get; set; } = dto => throw new Exception();
 
-        public Task<ObjectResult> AssociateAccount(PaymentMethodConfirmation payload) {
-            var task = new Task<ObjectResult>(() => OnAssociation(payload));
+        public Task AssociateAccount(PaymentMethodConfirmation payload) {
+            var task = new Task(() => OnAssociation(payload));
             task.Start();
             return task;
         }

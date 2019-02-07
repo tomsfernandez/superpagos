@@ -1,9 +1,11 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Web.Controllers;
+using Web.Model.Domain;
 using Web.Service.Provider;
 
 namespace Web.Tests {
@@ -28,6 +30,9 @@ namespace Web.Tests {
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                     options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
+            services.AddAuthorization(options => {
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, Role.ADMIN.ToString()));
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {

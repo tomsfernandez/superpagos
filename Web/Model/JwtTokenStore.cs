@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Web.Model.KeyBuilder;
 
@@ -9,14 +10,15 @@ namespace Web.Model {
 
         public JwtTokenStore() { }
 
-        public string GiveToken(DateTime expirationDate, TokenKeyBuilder keyBuilder) {
+        public string GiveToken(DateTime expirationDate, TokenKeyBuilder keyBuilder, List<Claim> claims) {
             var securityKey = keyBuilder.BuildKey();
             var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var tokenDescriptor = new SecurityTokenDescriptor {
                 Expires = expirationDate,
                 NotBefore = DateTime.Now,
                 IssuedAt = DateTime.Now,
-                SigningCredentials = creds
+                SigningCredentials = creds,
+                Subject = new ClaimsIdentity(claims)
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);

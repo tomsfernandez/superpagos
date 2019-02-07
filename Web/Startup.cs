@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,6 +17,8 @@ using NLog.Web;
 using Swashbuckle.AspNetCore.Swagger;
 using Web.Extensions;
 using Web.Model;
+using Web.Model.Domain;
+using Web.Model.JwtClaim;
 using Web.Service;
 using Web.Service.Email;
 using Web.Service.Provider;
@@ -54,6 +57,9 @@ namespace Web {
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey))
                     };
                 });
+            services.AddAuthorization(options => {
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, Role.ADMIN.ToString()));
+            });
             IdentityModelEventSource.ShowPII = true; // así jwt muestra bien el error
             services.AddAutoMapper();
             services.AddCors();
@@ -67,6 +73,7 @@ namespace Web {
             services.AddLogging();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "Superpagos API", Version = "v1"}); });
             services.AddWebSocketCache();
+            services.AddTransient<ClaimExtractorFactory>(provider => new RealClaimExtractorFactory());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,7 +94,11 @@ namespace Web {
             
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
-            app.UseCors();
+             app.UseCors(builder => {
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                builder.AllowAnyOrigin();
+            });
             app.UseAuthentication();
             app.UseMvc();
         }
