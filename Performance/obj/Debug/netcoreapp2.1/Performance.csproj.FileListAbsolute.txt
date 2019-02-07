@@ -1,9 +1,0 @@
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\bin\Debug\netcoreapp2.1\Performance.deps.json
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\bin\Debug\netcoreapp2.1\Performance.dll
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\bin\Debug\netcoreapp2.1\Performance.pdb
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\obj\Debug\netcoreapp2.1\Performance.csprojAssemblyReference.cache
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\obj\Debug\netcoreapp2.1\Performance.csproj.CoreCompileInputs.cache
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\obj\Debug\netcoreapp2.1\Performance.AssemblyInfoInputs.cache
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\obj\Debug\netcoreapp2.1\Performance.AssemblyInfo.cs
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\obj\Debug\netcoreapp2.1\Performance.dll
-C:\Users\TomasGreencode\home\projects\Superpagos\Performance\obj\Debug\netcoreapp2.1\Performance.pdb
