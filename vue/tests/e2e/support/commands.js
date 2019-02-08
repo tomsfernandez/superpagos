@@ -23,11 +23,15 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-Cypress.Commands.add("store", () => cy.window().its('appStore'));
-Cypress.Commands.add("login", credentials => cy.store().dispatch("login", credentials));
-Cypress.Commands.add("register", credentials => cy.store().dispatch("register", credentials));
-Cypress.Commands.add("deleteMyself", () => cy.store().dispatch("deleteMyself"));
+
+const withStore = fn => cy.window().its('appStore').then(x => fn(x));
+
+Cypress.Commands.add("withStore", fn => withStore(fn));
+Cypress.Commands.add("register", credentials => cy.request('POST', `${Cypress.env('EXTERNAL_API')}/api/users`, credentials));
+Cypress.Commands.add("login", credentials => withStore(s => s.dispatch("login", credentials)));
+Cypress.Commands.add("deleteMyself", () => withStore(s => s.dispatch("deleteMyself")));
 Cypress.Commands.add("removeUser", (email) => cy.request({
   url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteUser/${email}`, 
   headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
 }));
+Cypress.Commands.add("logout", () => withStore(s => s.dispatch("logout")));

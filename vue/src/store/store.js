@@ -69,12 +69,13 @@ export default new Vuex.Store({
   },
   actions: {
     async login({commit}, credentials){
-      const res = await api.login(credentials);
-      return Promise.all([
-        commit("setLongLivedToken", res.data.longLivedToken),
-        commit("setShortLivedToken", res.data.shortLivedToken),
-        commit("setAdmin", res.data.isAdmin)
-        ]);
+      return api.login(credentials).then(res => {
+        return Promise.all([
+          commit("setLongLivedToken", res.data.longLivedToken),
+          commit("setShortLivedToken", res.data.shortLivedToken),
+          commit("setAdmin", res.data.isAdmin)
+        ])
+      });
     },
     async renewToken({commit, getters}){
       try{
