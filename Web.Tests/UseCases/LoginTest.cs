@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Web.Controllers;
 using Web.Dto;
 using Web.Model.Domain;
+using Web.Model.JwtClaim;
 using Web.Tests.Helpers;
 using Xunit;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -24,7 +27,8 @@ namespace Web.Tests.UseCases {
         public LoginTest() {
             Context = TestHelper.MakeContext();
             Mapper = TestHelper.CreateAutoMapper();
-            UsersController = new UsersController(Context, Mapper, Config);
+            UsersController = new UsersController(Context, Mapper, 
+                Config, new SameClaimExtractorFactory(new List<Claim>()));
             AuthController = new AuthenticationController(Context, Config);
             Jaimito = UserFactory.GetJaimitoAsDto();
         }

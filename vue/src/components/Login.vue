@@ -2,7 +2,7 @@
 	<div class="col-sm-6">
 		<div class="jumbotron superpagos-login">
 			<ErrorMessages :errors="errorMessages"></ErrorMessages>
-			<form>
+			<form @submit="login">
 				<div class="form-group">
 					<label class="" for="emailInput">Email</label>
 					<input class="form-control" type="text" v-model="email" id="emailInput" data-cy="email-input" placeholder="Email">
@@ -11,16 +11,16 @@
 					<label for="passwordInput">Contraseña</label>
 					<input class="form-control" type="password" v-model="password" id="passwordInput" data-cy="password-input" placeholder="Contraseña">
 				</div>
-			</form>
-			<button class="btn badge-primary btn-block" @click="login" data-cy="submit">Iniciar Sesión</button>
-			<br/>
-			<div class="offset-sm-7 col-sm-5 no-padding">
-				<button class="btn badge-primary btn-block" data-cy="register-button" @click="goRegister">
-					Nuevo usuario
-				</button>
+				<button class="btn badge-primary btn-block" type="submit" data-cy="submit">Iniciar Sesión</button>
 				<br/>
-				<a href="#" class="float-right" @click="goToPasswordRecoveryDialog()">Recuperar contraseña</a>
-			</div>
+				<div class="offset-sm-7 col-sm-5 no-padding">
+					<button class="btn badge-primary btn-block" data-cy="register-button" @click="goRegister">
+						Nuevo usuario
+					</button>
+					<br/>
+					<a href="#" class="float-right" @click="goToPasswordRecoveryDialog()">Recuperar contraseña</a>
+				</div>
+			</form>
 		</div>
 	</div>
 </template>

@@ -101,9 +101,11 @@ namespace Web.Controllers {
         public async Task<IActionResult> Delete(long id) {
             var paymentMethod = await Context.PaymentMethods.FindAsync(id);
             if (paymentMethod == null) return NotFound();
+            var userId = GetIdFromToken();
+            if (paymentMethod.User.Id != userId) return Unauthorized();
             Context.PaymentMethods.Remove(paymentMethod);
             Context.SaveChanges();
-            return Ok("ÖK");
+            return Ok("OK");
         }
     }
 }

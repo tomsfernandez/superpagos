@@ -16,7 +16,9 @@ export default function setup(){
 	},error => {
 		if(error.response.status === 401 && store.state.longLivedToken){
 			return store.dispatch("renewToken").then(() => axios.request(error.config));
+		}else if(error.response.status === 401 && !store.state.longLivedToken){
+			return store.dispatch("logout");
 		}
-		return store.dispatch("logout");
+		return Promise.reject(error);
 	})
 }

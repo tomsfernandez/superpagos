@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Net.Mail;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -11,18 +10,20 @@ using Microsoft.Extensions.Configuration;
 using Web.Dto;
 using Web.Model;
 using Web.Model.Domain;
+using Web.Model.JwtClaim;
 
 namespace Web.Controllers {
     [Route("api/[controller]")]
     [ApiController, Authorize]
-    public class UsersController : ControllerBase {
+    public class UsersController : AuthenticatedController {
 
         private AppDbContext Context { get; }
         private IMapper Mapper { get; }
         private PasswordEncrypter PasswordEncrypter { get; }
         private IConfiguration Config { get; }
 
-        public UsersController(AppDbContext context, IMapper mapper, IConfiguration config) {
+        public UsersController(AppDbContext context, IMapper mapper, 
+            IConfiguration config, ClaimExtractorFactory extractorFactory) : base(extractorFactory) {
             Context = context;
             Mapper = mapper;
             Config = config;
@@ -32,14 +33,18 @@ namespace Web.Controllers {
         [HttpGet("")]
         public async Task<IActionResult> Get() {
             var users = await Context.Users.ToListAsync();
-            return Ok(users);
+            var usersWithoutPassword = users.Select(x => Mapper.Map<UserDtoWithoutPassword>(x)).ToList();
+            return Ok(usersWithoutPassword);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) {
+            var userId = GetIdFromToken();
+            if (id != userId) return Unauthorized();
             var user = await Context.Users.FindAsync(id);
             if (user == null) return NotFound();
-            return Ok(user);
+            var userWithoutPassword = Mapper.Map<UserDtoWithoutPassword>(user);
+            return Ok(userWithoutPassword);
         }
 
         // todo: return User without password
@@ -53,11 +58,14 @@ namespace Web.Controllers {
             user.Password = PasswordEncrypter.Encrypt(dto.Password);
             await Context.Users.AddAsync(user);
             await Context.SaveChangesAsync();
-            return Ok(user);
+            var userWithoutPassword = Mapper.Map<UserDtoWithoutPassword>(user);
+            return Ok(userWithoutPassword);
         }
         
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) {
+        public async Task<IActionResult> Delete(long id) {
+            var userId = GetIdFromToken();
+            if (id != userId) return Unauthorized();
             var user = await Context.Users.FindAsync(id);
             if (user == null) return NotFound();
             Context.Users.Remove(user);
@@ -65,9 +73,18 @@ namespace Web.Controllers {
             return Ok();
         }
 
+        [HttpDelete("")]
+        public async Task<IActionResult> Delete() {
+            var userId = GetIdFromToken();
+            var user = await Context.Users.FindAsync(userId);
+            Context.Users.Remove(user);
+            Context.SaveChanges();
+            return Ok();
+        }
+
         private bool IsEmailValid(string email) {
             try {
-                var mailAddress = new MailAddress(email);
+                new MailAddress(email);
                 return true;
             }
             catch (FormatException) {

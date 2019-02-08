@@ -1,11 +1,12 @@
 <template>
 	<div class="col-sm-6 register">
 		<div class="jumbotron superpagos-register">
-			<ErrorMessages :errors="errorMessages"></ErrorMessages>
-			<form>
+			<ErrorMessages :errors="errorMessages" data-cy="errors"></ErrorMessages>
+			<form @submit="register">
 				<div class="form-group">
 					<label class="" for="nameInput">Nombre</label>
-					<input class="form-control" type="text" v-model="name" id="nameInput" data-cy="name" placeholder="Nombre" required>
+					<input class="form-control" type="text" v-model="name" id="nameInput" data-cy="name"
+					       placeholder="Nombre" required>
 				</div>
 				<div class="form-group">
 					<label class="" for="emailInput">Email</label>
@@ -20,8 +21,8 @@
 					       data-cy="password"
 					       required>
 				</div>
+				<button class="btn badge-primary btn-block" type="submit" data-cy="submit">Registrarse</button>
 			</form>
-			<button class="btn badge-primary btn-block" id="register-button" @click="register()" data-cy="submit">Registrarse</button>
 			<br/>
 			<div class="offset-sm-8 col-sm-4">
 				<button class="btn badge-primary btn-block" @click="reset()">Cancelar</button>
@@ -32,6 +33,7 @@
 
 <script>
 	import ErrorMessages from "./ErrorMessages";
+	import * as api from "../api";
 
 	export default {
 		name: "Register",
@@ -46,23 +48,22 @@
 			return {
 				name: "",
 				email: "",
-				password: ""
-			}
-		},
-		computed: {
-			errorMessages() {
-				return [];
+				password: "",
+				errorMessages: [],
 			}
 		},
 		methods: {
-			reset(){
+			reset() {
 				this.name = "";
 				this.email = "";
 				this.password = "";
 			},
-			register(){
-				this.$store.dispatch("register", {name: this.name, email: this.email, password: this.password, role: this.role})
-					.then(() => this.$router.push("login"));
+			register(e) {
+				e.preventDefault();
+				const credentials = {name: this.name, email: this.email, password: this.password, role: this.role};
+				api.register(credentials)
+					.then(() => this.$router.push("login"))
+					.catch(e => this.errorMessages = e.response.data);
 			}
 		}
 	}

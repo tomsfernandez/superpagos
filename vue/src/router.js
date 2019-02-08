@@ -5,7 +5,7 @@ import Landing from './views/Landing'
 import store from './store/store';
 import Login from "./components/Login";
 import Register from "./components/Register";
-import OperationsTable from "./components/OperationsTable";
+import OperationsTable from "./components/MovementsTable";
 import Providers from "./views/Providers";
 import PaymentMethods from "./views/PaymentMethods";
 import PaymentMethodConfirmation from "./views/PaymentMethodConfirmation";

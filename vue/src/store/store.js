@@ -84,10 +84,6 @@ export default new Vuex.Store({
         commit("logout");
       }
     },
-    async register({commit}, credentials){
-      const res = await api.register(credentials);
-      commit("setUser", res.data);
-    },
     async getMethods({commit}){
       const res = await api.getMethods();
       commit("setMethods", res.data);

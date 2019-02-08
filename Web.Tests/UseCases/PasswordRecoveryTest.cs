@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -10,6 +11,7 @@ using Web.Controllers;
 using Web.Dto;
 using Web.Model;
 using Web.Model.Domain;
+using Web.Model.JwtClaim;
 using Web.Service.Email;
 using Web.Tests.Helpers;
 using Web.Tests.Service;
@@ -31,7 +33,8 @@ namespace Web.Tests.UseCases {
         public PasswordRecoveryTest() {
             Context = TestHelper.MakeContext();
             Mapper = TestHelper.CreateAutoMapper();
-            UsersController = new UsersController(Context, Mapper, Config);
+            UsersController = new UsersController(Context, Mapper, Config, 
+                new SameClaimExtractorFactory(new List<Claim>()));
             EmailSender = new StubEmailSender(() => new List<object>());
             RecoveryController = new PasswordRecoveryController(Context, Config, EmailSender);
             AuthController = new AuthenticationController(Context, Config);

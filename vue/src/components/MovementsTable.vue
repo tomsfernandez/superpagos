@@ -17,7 +17,7 @@
 <script>
 
 	export default {
-		name: "OperationsTable",
+		name: "MovementsTable",
 		data() {
 			return {
 				localDataSource: [{

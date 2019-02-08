@@ -28,3 +28,8 @@ new Vue({
   },
   render: h => h(App)
 }).$mount('#app');
+
+if (window.Cypress) {
+  console.log("Vuex store is included in test suite...");
+  window.appStore = store
+}

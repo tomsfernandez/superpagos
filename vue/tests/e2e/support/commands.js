@@ -23,3 +23,11 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+Cypress.Commands.add("store", () => cy.window().its('appStore'));
+Cypress.Commands.add("login", credentials => cy.store().dispatch("login", credentials));
+Cypress.Commands.add("register", credentials => cy.store().dispatch("register", credentials));
+Cypress.Commands.add("deleteMyself", () => cy.store().dispatch("deleteMyself"));
+Cypress.Commands.add("removeUser", (email) => cy.request({
+  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteUser/${email}`, 
+  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+}));

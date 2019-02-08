@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -8,23 +10,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Web.Controllers;
 using Web.Dto;
-using Web.Model.Domain;
+using Web.Model.JwtClaim;
 using Web.Tests.Helpers;
 using Xunit;
 
 namespace Web.Tests.UseCases {
     public class RegisterTest : IDisposable{
 
-        private AppDbContext Context { get; set; }
-        private UsersController Controller { get; set; }
-        private IMapper Mapper { get; set; }
-        private UserDto Jaimito { get; set; }
+        private AppDbContext Context { get; }
+        private UsersController Controller { get; }
+        private IMapper Mapper { get; }
+        private UserDto Jaimito { get; }
         private IConfiguration Config { get; } = Startup.Configuration;
 
         public RegisterTest() {
             Context = TestHelper.MakeContext();
             Mapper = TestHelper.CreateAutoMapper();
-            Controller = new UsersController(Context, Mapper, Config);
+            Controller = new UsersController(Context, Mapper, Config, new SameClaimExtractorFactory(new List<Claim>()));
             Jaimito = UserFactory.GetJaimitoAsDto();
         }
 
