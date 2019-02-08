@@ -35,3 +35,15 @@ Cypress.Commands.add("removeUser", (email) => cy.request({
   headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
 }));
 Cypress.Commands.add("logout", () => withStore(s => s.dispatch("logout")));
+Cypress.Commands.add("addProvider", () => cy.request({
+  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/addProvider`, 
+  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+}));
+Cypress.Commands.add("removeProvider", () => cy.request({
+  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteProvider`, 
+  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+}));
+Cypress.Commands.add("removeAllMethodsFromUser", (email) => cy.request({
+  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteAllFromUser/${email}`, 
+  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+}))
