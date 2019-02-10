@@ -91,6 +91,15 @@
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="WebApp\.idea\encodings.xml" />
+        <Content Include="WebApp\.idea\inspectionProfiles\Project_Default.xml" />
+        <Content Include="WebApp\.idea\jsLibraryMappings.xml" />
+        <Content Include="WebApp\.idea\libraries\cypress.xml" />
+        <Content Include="WebApp\.idea\misc.xml" />
+        <Content Include="WebApp\.idea\modules.xml" />
+        <Content Include="WebApp\.idea\vcs.xml" />
+        <Content Include="WebApp\.idea\vue.iml" />
+        <Content Include="WebApp\.idea\workspace.xml" />
     </ItemGroup>
 
 </Project>

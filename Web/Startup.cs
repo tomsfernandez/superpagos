@@ -100,6 +100,7 @@ namespace Web {
                 builder.AllowAnyOrigin();
             });
             app.UseAuthentication();
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }
