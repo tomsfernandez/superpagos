@@ -71,12 +71,12 @@ namespace Web.Tests.UseCases {
             linkingResult.StatusCode.Should().Be(400);
         }
 
-        public ClaimExtractorFactory GetClaimsExtractorFactoryFor(User user) {
+        private ClaimExtractorFactory GetClaimsExtractorFactoryFor(User user) {
             var idClaim = new Claim(ClaimTypes.Name, user.Id.ToString());
             return new SameClaimExtractorFactory(new List<Claim>{idClaim});
         }
 
-        public void Setup() {
+        private void Setup() {
             Context.Providers.Add(VisaProvider);
             Context.Users.Add(Jaimito);
             Context.SaveChanges();
