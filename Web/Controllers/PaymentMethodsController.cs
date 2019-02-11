@@ -59,6 +59,7 @@ namespace Web.Controllers {
             var errors = ValidateAssociationPayload(payload);
             if (errors.Count > 0) return BadRequest(errors);
             var provider = Context.Providers.Single(x => x.Code.Equals(payload.ProviderCode));
+            // todo: add endpoint specific for method association
             var endpoint = provider.PaymentEndpoint;
             var confirmationPayload = CreateConfirmationPayload(payload);
             var api = ProviderApiFactory.Create(endpoint);

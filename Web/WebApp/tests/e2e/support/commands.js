@@ -46,4 +46,4 @@ Cypress.Commands.add("removeProvider", () => cy.request({
 Cypress.Commands.add("removeAllMethodsFromUser", (email) => cy.request({
   url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteAllFromUser/${email}`, 
   headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
-}))
+}));

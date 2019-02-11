@@ -49,7 +49,7 @@ namespace Web.Controllers {
 
         private bool AuthenticatedUserIsOwnerOfPaymentMethod(long paymentMethodId) {
             var userId = GetIdFromToken();
-            if (Context.PaymentMethods.Find(paymentMethodId) != null) return false;
+            if (Context.PaymentMethods.Find(paymentMethodId) == null) return false;
             return Context.PaymentMethods.Single(x => x.Id == paymentMethodId).User.Id != userId;
         }
     }
