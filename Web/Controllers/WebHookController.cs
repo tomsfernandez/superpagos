@@ -30,7 +30,7 @@ namespace Web.Controllers {
             if (movement == null) return BadRequest($"Operation with id: {response.OperationId} does not exist");
             var transaction = movement.Transaction;
             if (response.IsBadRequest() || response.IsError()) {
-                transaction.Movements.ForEach(async x => await x.Rollback(ProviderApiFactory, Context));
+                transaction.Movements.ForEach(x => x.Rollback(ProviderApiFactory, Context).Wait());
             }
             else if (response.IsOk()) {
                 movement.Success();
