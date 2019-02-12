@@ -80,8 +80,8 @@ namespace Web.Controllers {
 
         private PaymentMethodConfirmation CreateConfirmationPayload(PaymentMethodPayload payload) {
             var tokenStore = new JwtTokenStore();
-            var keyBuilder = new SimpleKeyBuilder(DateTime.Now.AddSeconds(new Random().Next()).Ticks.ToString());
-            var permanentTokenLife = DateTime.Now;
+            var keyBuilder = new SimpleKeyBuilder(Guid.NewGuid().ToString());
+            var permanentTokenLife = DateTime.Now.AddHours(1);
             var token = tokenStore.GiveToken(permanentTokenLife, keyBuilder, new List<Claim>());
             return new PaymentMethodConfirmation {
                 AssociationToken = token,

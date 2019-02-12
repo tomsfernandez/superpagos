@@ -45,6 +45,7 @@ namespace Web.Controllers {
 
         [HttpGet("addProvider")]
         public IActionResult AddTestProvider() {
+            if (Context.Providers.Any(x => x.Code.Equals("DEMO"))) return Ok();
             var provider = new Provider {
                 Name = "DemoProvider",
                 Company = "DemoCompany",
