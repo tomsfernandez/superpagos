@@ -14,13 +14,16 @@ describe('Associate Payment Method', () => {
   beforeEach(() => {
     cy.server();
     cy.visit('/');
-    cy.removeAllMethodsFromUser(credentials.email);
-    cy.removeUser(credentials.email);
     cy.register(credentials);
     cy.login(credentials);
-    cy.removeProvider();
     cy.addProvider();
-  }); 
+  });
+  
+  afterEach(() => {
+    cy.removeAllMethodsFromUser(credentials.email);
+    cy.removeUser(credentials.email);
+    cy.removeProvider();
+  });
 
   it('associates payment succesfully and redirects to method view', () => {
     cy.route(`${Cypress.env('EXTERNAL_API')}/api/PaymentMethods`).as('getMethods');

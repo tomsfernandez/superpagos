@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Web.Dto;
 using Web.Extensions;
+using Web.Model;
 using Web.Model.Domain;
 using Web.Model.JwtClaim;
+using Web.Model.KeyBuilder;
 using Web.Service.Provider;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
@@ -76,9 +78,11 @@ namespace Web.Controllers {
             return Ok("OK");
         }
 
-        // todo: Add token confection
         private PaymentMethodConfirmation CreateConfirmationPayload(PaymentMethodPayload payload) {
-            var token = "aToken";
+            var tokenStore = new JwtTokenStore();
+            var keyBuilder = new SimpleKeyBuilder(DateTime.Now.AddSeconds(new Random().Next()).Ticks.ToString());
+            var permanentTokenLife = DateTime.Now;
+            var token = tokenStore.GiveToken(permanentTokenLife, keyBuilder, new List<Claim>());
             return new PaymentMethodConfirmation {
                 AssociationToken = token,
                 OperationTokenFromProvider = payload.OperationTokenFromProvider

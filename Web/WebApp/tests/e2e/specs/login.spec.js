@@ -13,9 +13,12 @@ describe('Login Test with Server', () => {
   beforeEach(() => {
     cy.server();
     cy.visit('/login');
-    cy.removeUser(credentials.email);
     cy.register(credentials);
-  }); 
+  });
+  
+  afterEach(() => {
+    cy.removeUser(credentials.email);
+  });
 
   it('logs in succesfully and redirects to home', () => {
     cy.route('POST', `${Cypress.env('EXTERNAL_API')}/api/login`).as('login');

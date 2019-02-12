@@ -50,7 +50,8 @@ namespace Web.Controllers {
                 Company = "DemoCompany",
                 Code = "DEMO",
                 PaymentEndpoint = DemoEndpoint,
-                RollbackEndPoint = $"{DemoEndpoint}/rollback"
+                RollbackEndPoint = $"{DemoEndpoint}/rollback",
+                LinkEndpoint = $"{DemoEndpoint}/link"                
             };
             Context.Providers.Add(provider);
             Context.SaveChanges();

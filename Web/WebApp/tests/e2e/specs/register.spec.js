@@ -14,8 +14,11 @@ describe('Register Test with Server', () => {
   beforeEach(() => {
     cy.server();
     cy.visit('/register');
+  });
+  
+  afterEach(() => {
     cy.removeUser(credentials.email);
-  }); 
+  });
 
   it('registers user that doesnt exist', () => {
     cy.route('POST', '/api/users').as('register');

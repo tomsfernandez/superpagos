@@ -27,6 +27,10 @@
 				<label for="roll-endpoint">Endpoint de rollback</label>
 				<input type="url" v-model="rollbackEndPoint" class="form-control" id="roll-endpoint" placeholder="Ingrese endpoint de rollback" required>
 			</div>
+			<div class="form-group col">
+				<label for="link-endpoint">Endpoint de asociación</label>
+				<input type="url" v-model="linkEndPoint" class="form-control" id="link-endpoint" placeholder="Ingrese endpoint de asociación" required>
+			</div>
 		</div>
 		<button style="float: right" type="submit" class="btn btn-primary">Submit</button>
 	</form>
@@ -43,14 +47,15 @@
 				company: '',
 				code: '',
 				paymentEndpoint: '',
-				rollbackEndPoint: ''
+				rollbackEndPoint: '',
+				linkEndPoint: ''
 			}
 		},
 		methods: {
 			submit(e){
 				e.preventDefault();
 				const provider = {name: this.name, company: this.company, code: this.code,
-					rollbackEndPoint: this.rollbackEndPoint, paymentEndpoint: this.paymentEndpoint};
+					rollbackEndPoint: this.rollbackEndPoint, paymentEndpoint: this.paymentEndpoint, linkEndPoint: this.linkEndPoint};
 				this.createProvider(provider);
 			},
 			...mapActions(["createProvider"])
