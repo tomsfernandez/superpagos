@@ -1,7 +1,5 @@
 import faker from "faker";
 
-const getStore = () => cy.window().its('appStore');
-
 describe('Login Test with Server', () => {
 
   const credentials = {
