@@ -1,6 +1,19 @@
 
 import axios from 'axios';
 
+export function createButton(button) {
+	return axios.post('PaymentButtons', button);
+}
+
+export function deleteButton(id) {
+	return axios.delete(`PaymentButtons/${id}`);	
+}
+
+export function getButtons() {
+ 	return axios.get('PaymentButtons'); 
+}
+
+
 export const createMethod = method => {
 	return axios.post('PaymentMethods', method);
 };

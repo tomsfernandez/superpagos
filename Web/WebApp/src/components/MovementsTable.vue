@@ -2,7 +2,7 @@
 	<div class="row" style="margin-top: 1em">
 		<div class="col-md-10 offset-md-1">
 			<kendo-grid :data-source="localDataSource" :pageable="true" :sortable-mode="'multiple'"
-			            :sortable-allow-unsort="true"
+			            :sortable-allow-unsort="true" :resizable="true"
 			            :sortable-show-indexes="true" :filterable-mode="'row'">
 				<kendo-grid-column :field="'ProductID'" :title="'ID'" :width="40"></kendo-grid-column>
 				<kendo-grid-column :field="'ProductName'"></kendo-grid-column>

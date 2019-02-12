@@ -107,6 +107,8 @@ namespace Web.Controllers {
             if (paymentMethod == null) return NotFound();
             var userId = GetIdFromToken();
             if (paymentMethod.User.Id != userId) return Unauthorized();
+            if (Context.PaymentButtons.Any(x => x.Method.Id == id))
+                return BadRequest("Debe borrar sus botónes de pago antes de poder borrar su medio de pago");
             Context.PaymentMethods.Remove(paymentMethod);
             Context.SaveChanges();
             return Ok("OK");

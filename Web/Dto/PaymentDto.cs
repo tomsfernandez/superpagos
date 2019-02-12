@@ -7,7 +7,6 @@ namespace Web.Dto {
 
         public long ButtonId { get; set; }
         public long PaymentMethodId { get; set; }
-        public double Amount { get; set; }
         public string Description { get; set; }
 
         public List<string> Validate(AppDbContext context) {
@@ -15,7 +14,6 @@ namespace Web.Dto {
             if(ButtonId == 0) errors.Add("ButtonId is invalid");
             if(string.IsNullOrEmpty(Description)) errors.Add("Description is null or empty");
             if(PaymentMethodId == 0) errors.Add("PayerId is invalid");
-            if(Amount <= 0) errors.Add("Amount is <= 0");
             var buttonExists = context.PaymentButtons.Find(ButtonId) != null;
             var paymentMethodExists = context.PaymentMethods.Find(PaymentMethodId) != null;
             if (!buttonExists) errors.Add("No existe Button para ese Button Id");

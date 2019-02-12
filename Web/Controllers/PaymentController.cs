@@ -28,7 +28,7 @@ namespace Web.Controllers {
             AmountOfRetries = int.Parse(Config["PaymentRetryAmount"]);
             ProviderApiFactory = providerApiFactory;
             Saga = new MovementSaga {Factory = providerApiFactory, Context = context};
-            TransactionBuilder = new TransactionBuilder();
+            TransactionBuilder = new TransactionBuilder(context);
         }
 
         [HttpPost("")]
@@ -37,7 +37,8 @@ namespace Web.Controllers {
             if (!AuthenticatedUserIsOwnerOfPaymentMethod(dto.PaymentMethodId))
                 errors.Add("The logged user is not the same as the owner of the account");
             if (errors.Any()) return BadRequest(errors);
-            var transaction = TransactionBuilder.Build(Context, dto);
+            var amount = Context.PaymentButtons.Single(x => x.Id == dto.ButtonId).Amount;
+            var transaction = TransactionBuilder.Build(dto, amount);
             Context.Transactions.Add(transaction);
             Context.SaveChangesAsync();
             var isSuccessful = Saga.Start(transaction.Movements);

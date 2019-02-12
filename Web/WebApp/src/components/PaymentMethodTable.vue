@@ -1,7 +1,7 @@
 <template>
-	<div class="row" style="margin-top: 1em">
+	<div>
 		<div class="col-md-10 offset-md-1">
-			<kendo-grid :data-source="methods" ref="grid" :pageable="true"
+			<kendo-grid :data-source="methods" ref="grid" :pageable="true" :resizable="true"
 			            :sortable-mode="'multiple'" :sortable-allow-unsort="true"
 			            :sortable-show-indexes="true" :filterable-mode="'row'">
 				<kendo-grid-column :field="'id'" :hidden="true"></kendo-grid-column>
@@ -34,7 +34,13 @@
 				const grid = this.$refs.grid.kendoWidget();
 				const dataItem = grid.dataItem((e.currentTarget).closest("tr"));
 				this.deleteMethod(dataItem.id);
-			}
+			},
+		  openButtonModal(e){
+            e.preventDefault();
+            const grid = this.$refs.grid.kendoWidget();
+            const dataItem = grid.dataItem((e.currentTarget).closest("tr"));
+            this.deleteMethod(dataItem.id);
+		  }
 		},
 		mounted() {
 			this.getMethods();

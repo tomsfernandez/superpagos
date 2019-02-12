@@ -26,7 +26,8 @@ export default new Vuex.Store({
     shortLivedToken: localStorage.getItem(SHORT_LIVED_TOKEN) || '',
     methods: [],
     isAdmin: false,
-    providers: []
+    providers: [],
+    buttons: []
   },
   getters: {
     isAuthenticated: (state) => state.longLivedToken !== '' && state.shortLivedToken !== ''
@@ -65,6 +66,15 @@ export default new Vuex.Store({
     },
     removeProvider(state, id){
       state.providers = state.providers.filter(x => x.id !== id);
+    },
+    setButtons(state, buttons){
+      state.buttons = buttons
+    },
+    addButton(state, button){
+      state.buttons = state.buttons.concat([button]);
+    },
+    removeButton(state, id){
+      state.buttons = state.buttons.filter(x => x.id !== id);
     }
   },
   actions: {
@@ -96,9 +106,17 @@ export default new Vuex.Store({
       const res = await api.getProviders();
       commit("setProviders", res.data);
     },
+    async getButtons({commit}){
+      const res = await api.getButtons();
+      commit("setButtons", res.data);
+    },
     async createProvider({commit}, provider){
       const res = await api.createProvider(provider);
       commit("addProvider", res.data);
+    },
+    async createButton({commit}, button){
+      const res = await api.createButton(button);
+      commit("addButton", res.data);
     },
     // todo: algo anda mal de esto
     async deleteProvider({commit}, id){
@@ -113,6 +131,11 @@ export default new Vuex.Store({
         console.log(res);
         commit("removeMethod", id);
       }).catch(e => console.log(e));
+    },
+    async deleteButton({commit}, id){
+      return api.deleteButton(id).then(res => {
+        commit("removeButton", id);
+      })
     }
   }
 })
