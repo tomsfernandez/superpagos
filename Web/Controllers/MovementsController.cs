@@ -21,6 +21,7 @@ namespace Web.Controllers {
         public async Task<IActionResult> All() {
             var userId = GetIdFromToken();
             var movements = await Context.Movements
+                .Include(x => x.Account.Provider)
                 .Where(x => x.Account.User.Id == userId)
                 .ToListAsync();
             return Ok(movements);

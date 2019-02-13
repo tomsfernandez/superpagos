@@ -49,3 +49,7 @@ export const deleteProvider = id => {
 export const deleteMethod = id => {
 	return axios.delete(`PaymentMethods/${id}`);
 };
+
+export const getOperations = () => {
+	return axios.get(`Movements`);
+};

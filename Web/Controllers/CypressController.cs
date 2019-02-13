@@ -1,6 +1,5 @@
-using System.Data.Entity;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
@@ -62,9 +61,12 @@ namespace Web.Controllers {
         [HttpGet("deleteAllFromUser/{email}")]
         public IActionResult DeleteAllFromUser(string email) {
             var user = Context.Users.SingleOrDefault(x => x.Email.Equals(email));
-            var methods = Context.PaymentMethods.Where(x => x.User.Id == user.Id).ToList();
-            Context.PaymentMethods.RemoveRange(methods);
-            Context.SaveChanges();
+            if (user != null)
+            {
+                var methods = Context.PaymentMethods.Where(x => x.User.Id == user.Id).ToList();
+                Context.PaymentMethods.RemoveRange(methods);
+                Context.SaveChanges();
+            }
             return Ok();
         }
 
@@ -87,5 +89,38 @@ namespace Web.Controllers {
             }
             return Ok();
         }
+
+        [HttpGet("addMovements/{email}")]
+        public IActionResult AddTestMovements(string email)
+        {
+            var user = Context.Users.SingleOrDefault(aUser => aUser.Email.Equals(email));
+            var provider = Context.Providers.SingleOrDefault(aProvider => aProvider.Code.Equals("DEMO"));
+            if (user != null && provider != null)
+            {
+                var testPaymentMethod = new PaymentMethod {Token = "aToken", User = user, Provider = provider};
+                var testMovements = new List<Movement>
+                {
+                    new Movement {Account = testPaymentMethod, Amount = 149.99, OperationType = Operation.DEPOSIT},
+                    new Movement {Account = testPaymentMethod, Amount = 15.99, OperationType = Operation.WITHDRAWAL},
+                    new Movement {Account = testPaymentMethod, Amount = 19.99, OperationType = Operation.DEPOSIT}
+                };
+                Context.Movements.AddRange(testMovements);
+                Context.SaveChanges();
+            }
+            return Ok();
+        }
+
+        [HttpGet("removeMovements/{email}")]
+        public IActionResult RemoveTestMovements(string email)
+        {
+            var user = Context.Users.SingleOrDefault(aUser => aUser.Email.Equals(email));
+            if (user != null)
+            {
+                var movements = Context.Movements.Where(x => x.Account.User.Id == user.Id).ToList();
+                Context.Movements.RemoveRange(movements);
+                Context.SaveChanges();
+            }
+            return Ok();
+        }    
     }
 }
