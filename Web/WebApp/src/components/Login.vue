@@ -1,7 +1,7 @@
 <template>
 	<div class="col-sm-6">
 		<div class="jumbotron superpagos-login">
-			<ErrorMessages :errors="errorMessages" data-cy="errors"></ErrorMessages>
+			<ErrorMessages :errors="errorMessages" data-cy="messages"></ErrorMessages>
 			<form @submit="login">
 				<div class="form-group">
 					<label class="" for="emailInput">Email</label>
@@ -18,7 +18,7 @@
 						Nuevo usuario
 					</button>
 					<br/>
-					<a href="#" class="float-right" @click="goToPasswordRecoveryDialog()">Recuperar contraseña</a>
+					<a href="#" class="float-right" @click="goToPasswordRecoveryDialog()" data-cy="password-recovery">Recuperar contraseña</a>
 				</div>
 			</form>
 		</div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-	import ErrorMessages from "./ErrorMessages";
+	import ErrorMessages from "./Messages";
 
 	export default {
 		name: "Login",
@@ -56,9 +56,8 @@
 			goRegister: function () {
 				this.$router.push('/register');
 			},
-			goToPasswordRecoveryDialog: function (event) {
-				event.preventDefault();
-				this.$router.push('/password_reset');
+			goToPasswordRecoveryDialog: function () {
+				this.$router.push('/passwordRecovery');
 			}
 		}
 	}

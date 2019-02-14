@@ -39,7 +39,7 @@ describe('Register Test with Server', () => {
     cy.get('[data-cy=submit]').click();
     cy.wait('@register');
     cy.url().should('include', 'register');
-    cy.get('[data-cy=errors]').should('be.visible');
+    cy.get('[data-cy=error-div]').should('be.visible');
   });
 });
 

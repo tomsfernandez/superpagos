@@ -1,7 +1,7 @@
 <template>
 	<div class="col-sm-6 register">
 		<div class="jumbotron superpagos-register">
-			<ErrorMessages :errors="errorMessages" data-cy="errors"></ErrorMessages>
+			<ErrorMessages :errors="errorMessages" data-cy="messages"></ErrorMessages>
 			<form @submit="register">
 				<div class="form-group">
 					<label class="" for="nameInput">Nombre</label>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-	import ErrorMessages from "./ErrorMessages";
+	import ErrorMessages from "./Messages";
 	import * as api from "../api";
 
 	export default {

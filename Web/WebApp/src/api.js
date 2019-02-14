@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 export function createButton(button) {
@@ -52,4 +51,12 @@ export const deleteMethod = id => {
 
 export const getOperations = () => {
 	return axios.get(`Movements`);
+};
+
+export const sendResetPasswordRequest = email => {
+	return axios.post(`PasswordRecovery`, email);
+};
+
+export const recoverPassword = recoverPasswordDto => {
+	return axios.post(`PasswordRecovery/reset`, recoverPasswordDto);	
 };

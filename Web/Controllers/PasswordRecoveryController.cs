@@ -41,9 +41,9 @@ namespace Web.Controllers {
             var keyBuilder = new PasswordRecoveryKeyBuilder(user);
             var token = TokenStore.GiveToken(DateTime.Now.AddMinutes(MinutesToRecoverPassword), keyBuilder, 
                 new List<Claim>());
-            var urlCallback = $"/{user.Id}/{token}";
-            await EmailSender.Send(dto.Email,"tomas.martinez@ing.austral.edu.ar",
-                "Superpagos - Recuperación de contraseña", urlCallback);
+            var urlCallback = $"passwordRecovery/{user.Id}/{token}";
+            await EmailSender.Send(dto.Email,"bruno.ledesma@ing.austral.edu.ar",
+                "Superpagos - Recuperación de contraseña", Config["ClientIP"] + urlCallback);
             return Ok(urlCallback);
         }
 

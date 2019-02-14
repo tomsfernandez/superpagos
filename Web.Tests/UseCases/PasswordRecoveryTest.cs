@@ -61,9 +61,11 @@ namespace Web.Tests.UseCases {
         public async void test_02_that_non_existant_email_returns_ok_without_url() {
             await RegisterJaimito();
             var resetToken = new ResetTokenDto {Email = "aDifferentEmail@hotmail.com"};
-            var result = await RecoveryController.SendResetToken(resetToken) as OkResult;
+            var result = await RecoveryController.SendResetToken(resetToken) as OkObjectResult;
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(200);
+            var url = result.Value as string;
+            url.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -82,9 +84,9 @@ namespace Web.Tests.UseCases {
         }
 
         private RecoveryCredential GetCredentialsFrom(string url, string password) {
-            var urlParts = url.Substring(1, url.Length-1).Split("/");
-            var id = long.Parse(urlParts[0]);
-            var token = urlParts[1];
+            var urlParts = url.Split("/");
+            var id = long.Parse(urlParts[1]);
+            var token = urlParts[2];
             return new RecoveryCredential {
                 Id = id,
                 Token = token,

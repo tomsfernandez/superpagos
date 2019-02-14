@@ -33,7 +33,7 @@ describe('Login Test with Server', () => {
     cy.get('[data-cy=password]').clear().type(credentials.password);
     cy.get('[data-cy=submit]').click();
     cy.wait('@login');
-    cy.get('[data-cy=errors]').should('be.visible');
+    cy.get('[data-cy=error-div]').should('be.visible');
     cy.url().should('include', 'login');
   });
 
@@ -43,7 +43,7 @@ describe('Login Test with Server', () => {
     cy.get('[data-cy=password]').clear().type(faker.internet.password());
     cy.get('[data-cy=submit]').click();
     cy.wait('@login');
-    cy.get('[data-cy=errors]').should('be.visible');
+    cy.get('[data-cy=error-div]').should('be.visible');
     cy.url().should('include', 'login');
   });});
 
