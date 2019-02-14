@@ -68,8 +68,15 @@ namespace Web {
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
             services.AddScoped<ProviderApiFactory>(provider => new RefitProviderApiFactory());
-            var sendGridApiKey = Configuration["SendGridApiKey"];
-            services.AddScoped<EmailSender>(provider => new SendGridEmailSender(sendGridApiKey));
+            var isTestingEnvironment = bool.Parse(Configuration["Testing"] ?? "false");
+            if (isTestingEnvironment) {
+                var mailTrapSender = null;
+                services.AddScoped<EmailSender>(provider => mailTrapSender);
+            }
+            else {
+                var sendGridApiKey = Configuration["SendGridApiKey"];
+                services.AddScoped<EmailSender>(provider => new SendGridEmailSender(sendGridApiKey));
+            }
             services.AddLogging();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "Superpagos API", Version = "v1"}); });
             services.AddWebSocketCache();
