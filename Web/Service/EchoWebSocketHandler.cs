@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 
 namespace Web.Service {
     public class EchoWebSocketHandler : WebSocketHandler{
-        public EchoWebSocketHandler(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager) { }
+        public EchoWebSocketHandler(WebSocketConnectionManager webSocketConnectionManager) 
+            : base(webSocketConnectionManager) { }
         
         public override async Task ReceiveAsync(WebSocket socket, WebSocketReceiveResult result, byte[] buffer) {
             var message = Encoding.UTF8.GetString(buffer);

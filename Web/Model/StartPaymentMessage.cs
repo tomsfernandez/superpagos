@@ -10,14 +10,18 @@ namespace Web.Model {
         public Operation OperationType { get; set; }
         public DateTime TimeStamp { get; set; }
         public string Token { get; set; }
+        public string ResponseEndpoint { get; set; }
 
-        public static StartPaymentMessage Build(PaymentMethod method, Operation operationType, double amount) {
+        public static StartPaymentMessage Build(PaymentMethod method, 
+            Operation operationType, double amount,
+            string responseEndpoint, string operationId) {
             var message = new StartPaymentMessage {
                 Amount = amount,
                 OperationType = operationType,
-                OperationId = Guid.NewGuid().ToString(),
+                OperationId = operationId,
                 TimeStamp = DateTime.Now,
-                Token = method.Token
+                Token = method.Token,
+                ResponseEndpoint = responseEndpoint
             };
             return message;
         }

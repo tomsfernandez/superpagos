@@ -7,7 +7,7 @@ namespace Web.Tests.Helpers {
             return new Provider {
                 Code = "VISA",
                 Company = "Visa",
-                RollbackEndPoint = rollback,
+                RollbackEndpoint = rollback,
                 Name = "Visa",
                 PaymentEndpoint = paymentEndpoint,
                 LinkEndpoint = linkEndpoint
@@ -18,7 +18,7 @@ namespace Web.Tests.Helpers {
             return new Provider {
                 Code = "MASTER_CARD",
                 Company = "MasterCard",
-                RollbackEndPoint = rollback,
+                RollbackEndpoint = rollback,
                 Name = "MasterCard",
                 PaymentEndpoint = paymentEndpoint,
                 LinkEndpoint = linkEndpoint

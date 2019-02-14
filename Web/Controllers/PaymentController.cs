@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,10 @@ namespace Web.Controllers {
             Config = configuration;
             AmountOfRetries = int.Parse(Config["PaymentRetryAmount"]);
             ProviderApiFactory = providerApiFactory;
-            Saga = new MovementSaga {Factory = providerApiFactory, Context = context};
+            Saga = new MovementSaga {
+                Factory = providerApiFactory, Context = context,
+                ResponseEndpoint = Config["ResponseEndpoint"]
+            };
             TransactionBuilder = new TransactionBuilder(context);
         }
 
@@ -51,7 +55,9 @@ namespace Web.Controllers {
         private bool AuthenticatedUserIsOwnerOfPaymentMethod(long paymentMethodId) {
             var userId = GetIdFromToken();
             if (Context.PaymentMethods.Find(paymentMethodId) == null) return false;
-            return Context.PaymentMethods.Single(x => x.Id == paymentMethodId).User.Id != userId;
+            return Context.PaymentMethods
+                       .Include(x => x.User)
+                       .Single(x => x.Id == paymentMethodId).User.Id == userId;
         }
     }
 }

@@ -9,6 +9,7 @@ import OperationsTable from "./components/MovementsTable";
 import Providers from "./views/Providers";
 import PaymentMethods from "./views/PaymentMethods";
 import PaymentMethodConfirmation from "./views/PaymentMethodConfirmation";
+import Payment from "./views/Payment"
 import PasswordRecoveryEmail from "./components/PasswordRecoveryEmail";
 import PasswordRecovery from "./components/PasswordRecovery";
 
@@ -29,7 +30,8 @@ const router = new Router({
       {path: '/', name: 'operations', component: OperationsTable},
       {path: 'methodRegister', name: 'methodRegister', component: PaymentMethodConfirmation},
       {path: 'methods', name: 'methods', component: PaymentMethods},
-      {path: 'providers', name: 'providers', component: Providers, meta: {requiresAdmin: true}}
+      {path: 'providers', name: 'providers', component: Providers, meta: {requiresAdmin: true}},
+      {path: 'payment/:id', name: 'payment', component: Payment}
     ]}
   ]
 });
@@ -38,7 +40,6 @@ router.beforeEach((to, from, next) => {
   const context = {to, from, next};
   const middleware = [redirectToAuthIfNotAuthenticated, checkAdmin];
   const toCall = middleware.map(middleware => middleware(context)).filter(x => x !== undefined);
-  console.log(toCall);
   if(toCall.length === 0) next();
   else toCall[0]();
 });

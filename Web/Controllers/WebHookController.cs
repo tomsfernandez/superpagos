@@ -24,9 +24,9 @@ namespace Web.Controllers {
             ProviderApiFactory = providerApiFactory;
         }
 
-        [HttpPost("/notified")]
+        [HttpPost("")]
         public async Task<IActionResult> Notify([FromBody] PaymentResponse response) {
-            var movement = await Context.Movements.SingleAsync(x => x.OperationId.Equals(response.OperationId));
+            var movement = await Context.Movements.SingleOrDefaultAsync(x => x.OperationId.Equals(response.OperationId));
             if (movement == null) return BadRequest($"Operation with id: {response.OperationId} does not exist");
             var transaction = movement.Transaction;
             if (response.IsBadRequest() || response.IsError()) {
@@ -35,9 +35,6 @@ namespace Web.Controllers {
             else if (response.IsOk()) {
                 movement.Success();
                 Context.Movements.Update(movement);
-            }
-            if (transaction.Movements.Select(x => x.IsSuccesfull).Aggregate(true, (acc, cur) => acc & cur)) {
-                // todo: cortar conexión de socket con OK
             }
             await Context.SaveChangesAsync();
             return Ok();

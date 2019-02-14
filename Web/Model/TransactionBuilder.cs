@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Web.Dto;
 using Web.Model.Domain;
 
@@ -20,7 +22,9 @@ namespace Web.Model {
         }
 
         private Movement GetPayerMovement(AppDbContext context, PaymentDto dto, double amount) {
-            var method = context.PaymentMethods.Find(dto.PaymentMethodId);
+            var method = context.PaymentMethods
+                .Include(x => x.Provider)
+                .SingleOrDefault(x => x.Id == dto.PaymentMethodId);
             return new Movement {
                 Account = method,
                 Amount = amount,
@@ -29,7 +33,9 @@ namespace Web.Model {
         }
 
         private Movement GetPaidMovement(AppDbContext context, PaymentDto dto, double amount) {
-            var method = context.PaymentButtons.Find(dto.ButtonId).Method;
+            var method = context.PaymentMethods
+                .Include(x => x.Provider)
+                .Single(x => x.Id == dto.PaymentMethodId);
             return new Movement {
                 Account = method,
                 Amount = amount,

@@ -76,12 +76,3 @@ describe('Auth Test with Server', () => {
     cy.removeUser(credentials.email);
   })
 });
-
-describe('Login Form UI tests', () => {
-
-  it('doesnt submit if information is missing', () => {
-    cy.get('[data-cy=email]').clear().type(faker.internet.email());
-    cy.get('[data-cy=submit]').click();
-    cy.url().should('include', 'login');
-  });
-});

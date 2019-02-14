@@ -28,12 +28,30 @@ export default new Vuex.Store({
         isAdmin: false,
         providers: [],
         operations: [],
-        buttons: []
+        buttons: [],
+        transactionState: "",
+        transactionId: 0,
+        pollInterval: {}
     },
     getters: {
-        isAuthenticated: (state) => state.longLivedToken !== '' && state.shortLivedToken !== ''
+        isAuthenticated: (state) => state.longLivedToken !== '' && state.shortLivedToken !== '',
+        getMethodsForPayment: (state) => state.methods.map(x => {
+            return {id: x.id, name: x.name}
+        }),
+        isTransactionInProgress: (state) => state.transactionState === "inProgress",
+        hasTransactionFinished: (state) => state.transactionState === "finished",
+        hasTransactionError: (state) => state.transactionState === "error"
     },
     mutations: {
+        startTransaction(state){
+            state.transactionState = "inProgress";
+        },
+        finishTransaction(state) {
+            state.transactionState = "finished";
+        },
+        errorTransaction(state) {
+            state.transactionState = "error";
+        },
         setUser(state, user) {
             state.user = user;
         },
@@ -82,6 +100,17 @@ export default new Vuex.Store({
         },
         addOperation(state, operation) {
             state.operations = state.operations.concat([operation]);
+        },
+        setTransaction(state, id){
+            state.transactionId = id;
+        },
+        setPollingInterval(state, interval){
+            state.interval = interval;
+        },
+        stopPollingInterval(state){
+            const interval = state.interval;
+            state.interval = {};
+            clearInterval(interval);
         }
     },
     actions: {
@@ -147,6 +176,31 @@ export default new Vuex.Store({
             return api.deleteButton(id).then(res => {
                 commit("removeButton", id);
             })
+        },
+        async makePayment({commit, dispatch}, payload){
+            try{
+                commit("startTransaction");
+                const res = await api.makePayment(payload);
+                commit("setTransaction", res.data);
+                dispatch("pollPayment", res.data);
+            }catch(e){
+                console.log(e);
+            }
+        },
+        async pollPayment({commit}, transactionId){
+            try{
+                const interval = setInterval(async () => {
+                    const {data} = await api.pollInterval(transactionId);
+                    if (data.failed || data.success){
+                        commit("stopPollingInterval");
+                    }
+                    if (data.failed) commit("errorTransaction");
+                    else if (data.success) commit("finishTransaction");
+                }, 1000);
+                commit("setPollingInterval", interval);
+            }catch (e) {
+                console.log(e);
+            }
         }
     }
 })

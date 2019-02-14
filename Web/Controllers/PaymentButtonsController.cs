@@ -60,7 +60,7 @@ namespace Web.Controllers {
                 button.Code,
                 button.Amount,
                 button.CreationDate,
-                ProviderName = button.Method.Provider.Name
+                button.Method.Provider.Name
             });
         }
 
