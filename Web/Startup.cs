@@ -70,7 +70,9 @@ namespace Web {
             services.AddScoped<ProviderApiFactory>(provider => new RefitProviderApiFactory());
             var isTestingEnvironment = bool.Parse(Configuration["Testing"] ?? "false");
             if (isTestingEnvironment) {
-                var mailTrapSender = null;
+                var mailTrapSender = new MailtrapEmailSender(
+                    Configuration["MailtrapHost"], int.Parse(Configuration["MailtrapPort"]), 
+                    Configuration["MailtrapUsername"], Configuration["MailtrapPassword"]);
                 services.AddScoped<EmailSender>(provider => mailTrapSender);
             }
             else {
