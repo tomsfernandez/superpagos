@@ -2,6 +2,7 @@
   "pluginsFile": "tests/e2e/plugins/index.js",
   "integrationFolder": "tests/e2e/specs",
   "supportFile": "tests/e2e/support/index.js",
+  "fixturesFolder": "tests/e2e/fixtures",
   "video": false,
   "baseUrl": "http://localhost:8080",
   "env": { 

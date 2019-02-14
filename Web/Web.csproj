@@ -80,6 +80,7 @@
       <_ContentIncludedByDefault Remove="Views\Shared\Error.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
       <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
+      <_ContentIncludedByDefault Remove="WebApp\cypress\fixtures\example.json" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,6 +1,14 @@
 
 import axios from 'axios';
 
+export function pollInterval(transactionId) {
+  return axios.get(`Movements/state/${transactionId}`);
+}
+
+export function makePayment(payload) {
+  return axios.post('Payment', payload);
+}
+
 export function createButton(button) {
 	return axios.post('PaymentButtons', button);
 }
@@ -12,7 +20,6 @@ export function deleteButton(id) {
 export function getButtons() {
  	return axios.get('PaymentButtons'); 
 }
-
 
 export const createMethod = method => {
 	return axios.post('PaymentMethods', method);

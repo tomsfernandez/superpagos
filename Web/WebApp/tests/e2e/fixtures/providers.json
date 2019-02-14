@@ -1,0 +1,17 @@
+[{
+  "id": 1,
+  "name": "Visa",
+  "company": "Visa",
+  "code": "VISA",
+  "linkEndpoint": "",
+  "paymentEndpoint": "",
+  "rollbackEndpoint": ""
+},{
+  "id": 2,
+  "name": "Amex",
+  "company": "American Express",
+  "code": "AMEX",
+  "linkEndpoint": "",
+  "paymentEndpoint": "",
+  "rollbackEndpoint": ""
+}]

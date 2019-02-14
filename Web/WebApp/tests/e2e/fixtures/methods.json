@@ -1,0 +1,11 @@
+[{
+  "id": 1,
+  "name": "Visa",
+  "company": "Visa",
+  "creationTimestamp": "2019-02-13T23:14:26.322Z"
+}, {
+  "id": 2,
+  "name": "Amex",
+  "company": "American Express",
+  "creationTimestamp": "2019-02-13T23:14:26.322Z"
+}]

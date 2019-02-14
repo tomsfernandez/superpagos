@@ -1,7 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Polly;
 using Refit;
 using Web.Service.Provider;
 
@@ -9,7 +13,7 @@ namespace Web.Model.Domain {
     public class Movement {
 
         public long Id { get; set; }
-        public string OperationId { get; } = Guid.NewGuid().ToString();
+        public string OperationId { get; set; } = Guid.NewGuid().ToString();
         public PaymentMethod Account { get; set; }
         public double Amount { get; set; }
         public bool IsSuccesfull { get; private set; }
@@ -20,26 +24,31 @@ namespace Web.Model.Domain {
         public Transaction Transaction { get; set; }
 
         // todo: hacer async
-        public bool Start(ProviderApiFactory providerApiFactory, AppDbContext context) {
+        public bool Start(ProviderApiFactory providerApiFactory, 
+            AppDbContext context, 
+            string responseEndpoint) {
             InProcess = true;
             Started = true;
-            var api = providerApiFactory.Create(Account.Provider.RollbackEndPoint);
+            var couldTriggerPayment = false;
+            var api = providerApiFactory.Create(Account.Provider.PaymentEndpoint);
             try {
-                api.Pay(StartPaymentMessage.Build(Account, OperationType, Amount)).Wait();
-                Success();
+                api.Pay(StartPaymentMessage.Build(Account, OperationType, 
+                    Amount, responseEndpoint, OperationId)).Wait();
+                couldTriggerPayment = true;
             }
-            catch (Exception) {
+            catch (Exception e) {
+                Debug.Print(e.ToString());
                 IsSuccesfull = false;
                 InProcess = false;
             }
             context.Movements.Update(this);
-            return IsSuccesfull;
+            return couldTriggerPayment;
         }
         
         public async Task Rollback(ProviderApiFactory providerApiFactory, AppDbContext context) {
             IsRollback = true;
             InProcess = true;
-            var api = providerApiFactory.Create(Account.Provider.RollbackEndPoint);
+            var api = providerApiFactory.Create(Account.Provider.RollbackEndpoint);
             await api.Rollback(new RollbackMessage(OperationId));
             InProcess = false;
             context.Movements.Update(this);

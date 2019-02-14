@@ -1,7 +1,12 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Refit;
 using Web.Dto;
 using Web.Model;
+using Web.Service.Provider;
 
 namespace Web.Controllers {
     [Route("api/[controller]")]
@@ -26,13 +31,28 @@ namespace Web.Controllers {
 
         [HttpPost("pay")]
         public IActionResult Payment([FromBody] StartPaymentMessage dto) {
-            if (FailedPaymentToken.Equals(dto.Token)) return Ok();
-            return BadRequest();
+            var task = GetSuccessResponseTask(dto);
+            task.Start();
+            return Ok();
         }
 
         [HttpPost("rollback")]
         public IActionResult Rollback([FromBody] RollbackMessage dto) {
             return Ok();
+        }
+
+        public Task GetSuccessResponseTask(StartPaymentMessage dto) {
+            var paymentResponse = new PaymentResponse {
+                Code = 200,
+                Message = "",
+                OperationId = dto.OperationId,
+                Timestamp = DateTime.Now
+            };
+            return new Task(() => {
+                Thread.Sleep(2000);
+                var api = RestService.For<SuperpagosApi>(dto.ResponseEndpoint);
+                api.PaymentEnded(paymentResponse);
+            });
         }
     }
 }

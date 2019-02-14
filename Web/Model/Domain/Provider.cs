@@ -5,7 +5,7 @@ namespace Web.Model.Domain {
         public string Name { get; set; }
         public string Company { get; set; }
         public string Code { get; set; }
-        public string RollbackEndPoint { get; set; }
+        public string RollbackEndpoint { get; set; }
         public string PaymentEndpoint { get; set; }
         public string LinkEndpoint { get; set; } 
     }
