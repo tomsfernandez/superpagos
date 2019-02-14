@@ -1,6 +1,6 @@
 <template>
 	<li class="nav-item">
-		<a class="nav-link" href="#" @click="logout">Logout</a>
+		<a class="nav-link" href="#" @click="logout" data-cy="logout">Logout</a>
 	</li>
 </template>
 
