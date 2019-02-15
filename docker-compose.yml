@@ -6,7 +6,7 @@ services:
     container_name: 'api'
     build:
       context: .
-      dockerfile: Dockerfile.node.netcore
+      dockerfile: Dockerfile.netcore
       args:
         PROJECT_NAME: Web
     ports:
