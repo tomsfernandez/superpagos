@@ -24,12 +24,8 @@ export default function setup(){
 	})
   
   if (process.env.NODE_ENV === 'production') {
-    const splitUrl = axios.defaults.baseURL.split(":");
-    splitUrl[2] = "8080";
-    axios.defaults.baseURL = `${splitUrl.join()}/api`;
+    axios.defaults.baseURL = `api`;
   }else{
-    const splitUrl = axios.defaults.baseURL.split(":");
-    console.log(splitUrl);
     axios.defaults.baseURL = "http://localhost:5000/api";
   }
 }
