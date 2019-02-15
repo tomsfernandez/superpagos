@@ -74,6 +74,7 @@ namespace Web.Controllers {
         public IActionResult DeleteTestProvider() {
             var provider = Context.Providers.SingleOrDefault(x => x.Code.Equals("DEMO"));
             if (provider != null) {
+                Context.PaymentMethods.Where(x => x.Provider.Id == provider.Id).DeleteFromQuery();
                 Context.Providers.Remove(provider);
                 Context.SaveChanges();
             }

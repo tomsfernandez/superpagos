@@ -45,13 +45,5 @@ describe('Login Test with Server', () => {
     cy.wait('@login');
     cy.get('[data-cy=error-div]').should('be.visible');
     cy.url().should('include', 'login');
-  });});
-
-describe('Login Form UI tests', () => {
-
-  it('doesnt submit if information is missing', () => {
-    cy.get('[data-cy=email]').clear().type(faker.internet.email());
-    cy.get('[data-cy=submit]').click();
-    cy.url().should('include','login');
   });
 });

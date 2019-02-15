@@ -22,11 +22,11 @@ services:
     container_name: "postgres_ci"
     restart: unless-stopped
     ports:
-    - 5432:5432
+    - 5433:5432
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: sa
-      POSTGRES_DB: superpagos
+      POSTGRES_DB: superpagos_ci
       POSTGRES_HOST: postgres
     volumes:
     - superpagos_data_test:/var/lib/postgresql/data

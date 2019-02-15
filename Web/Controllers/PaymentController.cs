@@ -49,7 +49,7 @@ namespace Web.Controllers {
             if (!isSuccessful) {
                 return BadRequest();
             }
-            return Ok();
+            return Ok(transaction.Id);
         }
 
         private bool AuthenticatedUserIsOwnerOfPaymentMethod(long paymentMethodId) {

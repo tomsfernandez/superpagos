@@ -15,7 +15,7 @@ using Xunit;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Web.Tests.UseCases {
-    public class LoginTest : IDisposable{
+    public class LoginTest : IDisposable, IClassFixture<DatabaseFixture> {
 
         private AppDbContext Context { get; }
         private UsersController UsersController { get; }
@@ -24,8 +24,8 @@ namespace Web.Tests.UseCases {
         private IMapper Mapper { get; }
         private UserDto Jaimito { get; }
 
-        public LoginTest() {
-            Context = TestHelper.MakeContext();
+        public LoginTest(DatabaseFixture fixture) {
+            Context = fixture.DatabaseContext;
             Mapper = TestHelper.CreateAutoMapper();
             UsersController = new UsersController(Context, Mapper, 
                 Config, new SameClaimExtractorFactory(new List<Claim>()));
@@ -73,7 +73,7 @@ namespace Web.Tests.UseCases {
         }
 
         public void Dispose() {
-            Context.Database.EnsureDeleted();
+            Context.Users.DeleteFromQuery();
         }
     }
 }

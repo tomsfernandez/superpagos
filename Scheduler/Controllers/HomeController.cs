@@ -1,13 +1,19 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Scheduler.Models;
 
-namespace Scheduler.Controllers
-{
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
+namespace Scheduler.Controllers {
+    public class HomeController : Controller {
+        public HomeController(IBackgroundJobClient backgroundJob) {
+            BackgroundJob = backgroundJob;
+        }
+        
+        private IBackgroundJobClient BackgroundJob { get; }
+        
+        public IActionResult Index() {
             return View();
         }
 

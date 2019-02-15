@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Refit;
+using Web.Service;
 
 namespace Scheduler {
     public class Startup {
@@ -32,10 +34,7 @@ namespace Scheduler {
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc()
-//                .AddApplicationPart(typeof(FakeSuperpagosController).Assembly)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);            
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             var connectionString = Configuration.GetConnectionString("HangfireConnection");
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<DbCreatorContext>().UseNpgsql(connectionString);
             using(var context = new DbCreatorContext(dbContextOptionsBuilder.Options))
@@ -56,9 +55,9 @@ namespace Scheduler {
 
             app.UseHangfireDashboard("");
             app.UseHangfireServer();
-            
-//            var api = RestService.For<ISuperpagosApi>(Configuration["FakeSuperpagosEndpoint"]);
-            BackgroundJob.Enqueue( () => Console.WriteLine("HOLASASDOIAHODFINSOI"));
+
+            RecurringJob.AddOrUpdate(() => SuperpagosApiHealth(), Cron.MinuteInterval(1));
+            RecurringJob.AddOrUpdate(() => SengGridApiHealth(), Cron.MinuteInterval(1));
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -68,6 +67,18 @@ namespace Scheduler {
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        public void SuperpagosApiHealth() {
+            var url = Configuration["SuperpagosHealthBase"] ?? "http://localhost:5000/";
+            var api = RestService.For<HealthApi>(url);
+            api.SuperpagosHealth();
+        }
+
+        public void SengGridApiHealth() {
+            var url = Configuration["SendGridHealthBase"] ?? "http://status.sendgrid.com/";
+            var api = RestService.For<HealthApi>(url);
+            api.SuperpagosHealth();
         }
     }
 }

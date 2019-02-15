@@ -3,5 +3,10 @@
     "longLivedToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIiLCJyb2xlIjoiVVNFUiIsIm5iZiI6MTU1MDAyNDAxNiwiZXhwIjoxNTUwNDU2MDE2LCJpYXQiOjE1NTAwMjQwMTZ9.hWhzr5ioz6aKi7mb3FVnupqYJWzm9hkvv8Na4EeE_bQ",
     "shortLivedToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIiLCJyb2xlIjoiVVNFUiIsIm5iZiI6MTU1MDAyNDAxNiwiZXhwIjoxNTUwMDI3NjE2LCJpYXQiOjE1NTAwMjQwMTZ9.6dk2IltZZl4cBJ1kboZZFBZ_dsjZdfnIfdqXTpDTQps",
     "isAdmin": false
+  },
+  "admin": {
+    "longLivedToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIiLCJyb2xlIjoiVVNFUiIsIm5iZiI6MTU1MDAyNDAxNiwiZXhwIjoxNTUwNDU2MDE2LCJpYXQiOjE1NTAwMjQwMTZ9.hWhzr5ioz6aKi7mb3FVnupqYJWzm9hkvv8Na4EeE_bQ",
+    "shortLivedToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIiLCJyb2xlIjoiVVNFUiIsIm5iZiI6MTU1MDAyNDAxNiwiZXhwIjoxNTUwMDI3NjE2LCJpYXQiOjE1NTAwMjQwMTZ9.6dk2IltZZl4cBJ1kboZZFBZ_dsjZdfnIfdqXTpDTQps",
+    "isAdmin": true
   }
 }
