@@ -13,7 +13,7 @@ services:
       - "5750:5000"
     environment:
       DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
-      ResponseEndpoint: http://api/api/WebHook
+      ResponseEndpoint: http://api:5000/api/WebHook
     env_file:
       - .env
 #    depends_on:
@@ -27,6 +27,8 @@ services:
       dockerfile: Dockerfile.netcore
       args:
         PROJECT_NAME: VisaApi
+    ports:
+    - "8080:5000"
     env_file:
       - .env
        
