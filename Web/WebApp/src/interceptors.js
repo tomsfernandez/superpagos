@@ -22,4 +22,6 @@ export default function setup(){
 		}
 		return Promise.reject(error);
 	})
+  
+  axios.defaults.baseURL = process.env.VUE_APP_BASE_URL ? process.env.VUE_APP_BASE_URL : "http://localhost:5000"
 }
