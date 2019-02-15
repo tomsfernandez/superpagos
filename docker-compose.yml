@@ -16,8 +16,8 @@ services:
       DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
     env_file:
       - .env
-    depends_on:
-    - reverse_proxy
+#    depends_on:
+#    - reverse_proxy
        
   web:
     image: web
