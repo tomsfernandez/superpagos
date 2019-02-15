@@ -28,6 +28,8 @@ export default function setup(){
     splitUrl[2] = "8080";
     axios.defaults.baseURL = `${splitUrl.join()}/api`;
   }else{
+    const splitUrl = axios.defaults.baseURL.split(":");
+    console.log(splitUrl);
     axios.defaults.baseURL = "http://localhost:5000/api";
   }
 }
