@@ -41,8 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisaApi", "VisaApi\VisaApi.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx_config", "nginx_config", "{1683C68F-A6BF-41D8-B93B-0634079FF70C}"
 ProjectSection(SolutionItems) = preProject
-	nginx_conf\nginx.conf = nginx_conf\nginx.conf
-	nginx_conf\default.conf = nginx_conf\default.conf
+	nginx_config\default.conf = nginx_config\default.conf
+	nginx_config\nginx.conf = nginx_config\nginx.conf
 EndProjectSection
 EndProject
 Global

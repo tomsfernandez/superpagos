@@ -16,7 +16,7 @@ COPY nginx_config/default.conf /etc/nginx/conf.d/default.conf
 # Set the directory we want to run the next commands for
 WORKDIR /tmp/nginx/vue-single-page-app
 # Copy our source code into the container
-COPY . .
+COPY ./Web/WebApp .
 # Install the dependencies, can be commented out if you're running the same node version
 RUN npm install --production
 
