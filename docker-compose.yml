@@ -6,7 +6,7 @@ services:
     container_name: 'superpagos_api'
     build:
       context: .
-      dockerfile: Dockerfile.web.netcore
+      dockerfile: Dockerfile.node.netcore
       args:
         PROJECT_NAME: Web
     ports:
