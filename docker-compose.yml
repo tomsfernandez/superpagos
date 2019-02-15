@@ -10,7 +10,6 @@ services:
       args:
         PROJECT_NAME: Web
     ports:
-      - "8080:5000"
       - "5750:5000"
     environment:
       DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
