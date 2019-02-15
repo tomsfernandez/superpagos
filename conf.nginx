@@ -7,7 +7,7 @@ http {
         listen 80;
         
         location / {
-            index /usr/share/nginx/html/index.html;
+            return /usr/share/nginx/html/index.html;
         }
         
         location /api {
