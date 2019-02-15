@@ -35,6 +35,8 @@ services:
   reverse_proxy:
     image: nginx:stable-alpine
     container_name: "reverse_proxy"
+    ports:
+       - "80:80"
     volumes:
       - ./conf.nginx:/etc/nginx/nginx.conf:ro
       
