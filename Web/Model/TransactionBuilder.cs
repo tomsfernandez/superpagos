@@ -33,9 +33,10 @@ namespace Web.Model {
         }
 
         private Movement GetPaidMovement(AppDbContext context, PaymentDto dto, double amount) {
-            var method = context.PaymentMethods
-                .Include(x => x.Provider)
-                .Single(x => x.Id == dto.PaymentMethodId);
+            var method = context.PaymentButtons
+                .Include(x => x.Method)
+                    .ThenInclude(x => x.User)
+                .Single(x => x.Id == dto.ButtonId).Method;
             return new Movement {
                 Account = method,
                 Amount = amount,
