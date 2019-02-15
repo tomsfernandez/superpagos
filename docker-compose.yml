@@ -10,7 +10,7 @@ services:
       args:
         PROJECT_NAME: Web
     ports:
-      - "5000:5000"
+      - "8080:5000"
       - "5750:5000"
     environment:
       DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
@@ -29,8 +29,6 @@ services:
       - "80:80"
     env_file:
       - .env
-    volumes:
-      - ./conf.nginx:/etc/nginx/nginx.conf:ro
       
 #  reverse_proxy:
 #    image: nginx:stable-alpine

@@ -24,6 +24,7 @@ export default function setup(){
 	})
   
   if (process.env.NODE_ENV === 'production') {
+    console.log(process.env.VUE_APP_API_URL);
     axios.defaults.baseURL = `api`;
   }else{
     axios.defaults.baseURL = "http://localhost:5000/api";
