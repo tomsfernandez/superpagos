@@ -7,7 +7,7 @@ COPY . .
 
 RUN cd ${PROJECT_NAME}/WebApp && npm install vue-cli --production && npm run build 
 
-RUN cd ${PROJECT_NAME}/ && dotnet clean && dotnet run
+RUN cd ${PROJECT_NAME}/ && dotnet clean && dotnet publish -c Release -o /app/out
 
 # build runtime image
 FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine
