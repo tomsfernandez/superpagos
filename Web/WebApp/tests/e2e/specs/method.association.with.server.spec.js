@@ -1,9 +1,4 @@
-// type definitions for Cypress object "cy"
-/// <reference types="cypress" />
-
-import faker from "faker";
-
-describe('Associate Payment Method', () => {
+describe('Associate Payment Method with server', () => {
 
   const credentials = {
     name: "Barney Ullrich", 
