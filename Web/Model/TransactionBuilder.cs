@@ -28,7 +28,7 @@ namespace Web.Model {
             return new Movement {
                 Account = method,
                 Amount = amount,
-                OperationType = Operation.WITHDRAWAL
+                OperationType = Operation.DEPOSIT
             };
         }
 
@@ -40,7 +40,7 @@ namespace Web.Model {
             return new Movement {
                 Account = method,
                 Amount = amount,
-                OperationType = Operation.DEPOSIT
+                OperationType = Operation.WITHDRAWAL
             };
         }
     }
