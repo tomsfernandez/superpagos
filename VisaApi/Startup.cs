@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using VisaApi.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace VisaApi {
     public class Startup {
@@ -38,7 +39,8 @@ namespace VisaApi {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ILoggerFactory loggerFactory) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
@@ -46,6 +48,9 @@ namespace VisaApi {
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            loggerFactory.AddConsole(Configuration.GetSection("Logging")); //log levels set in your configuration
+            loggerFactory.AddDebug();
+            
             app.UseStaticFiles();
             
             app.UseAuthentication();
