@@ -1,0 +1,19 @@
+FROM microsoft/dotnet:2.1-sdk-alpine AS build-env
+RUN apk add --update nodejs
+ARG PROJECT_NAME
+ENV PROJECT_NAME ${PROJECT_NAME} 
+WORKDIR /app
+COPY . .
+
+RUN cd ${PROJECT_NAME}/WebApp && npm install && npm run build
+
+RUN cd ${PROJECT_NAME}/ && dotnet clean && dotnet publish -c Release -o /app/out
+
+# build runtime image
+FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine
+ARG PROJECT_NAME
+ENV PROJECT_NAME ${PROJECT_NAME} 
+RUN echo ${PROJECT_NAME}
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["sh", "-c", "dotnet $PROJECT_NAME.dll"]
