@@ -16,8 +16,6 @@ services:
       DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
     env_file:
       - .env
-#    depends_on:
-#    - reverse_proxy
        
   web:
     image: web
@@ -29,14 +27,6 @@ services:
       - "80:80"
     env_file:
       - .env
-      
-#  reverse_proxy:
-#    image: nginx:stable-alpine
-#    container_name: "reverse_proxy"
-#    ports:
-#       - "80:80"
-#    volumes:
-#      - ./conf.nginx:/etc/nginx/nginx.conf:ro
       
   scheduler:
     image: scheduler
@@ -59,6 +49,8 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    depends_on:
+      - postgres_hangfire
 
   migrations:
     image: web_migrations

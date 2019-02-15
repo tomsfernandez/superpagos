@@ -33,12 +33,6 @@ namespace Scheduler.Controllers {
             return View();
         }
 
-        [HttpPost("test")]
-        public IActionResult Test() {
-            BackgroundJob.Enqueue(() => Debug.WriteLine("Background Job completed successfully!"));
-            return RedirectToAction("Index", "Home");
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() {
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
