@@ -22,4 +22,10 @@ export default function setup(){
 		}
 		return Promise.reject(error);
 	})
+  
+  if (process.env.NODE_ENV === 'production') {
+    axios.defaults.baseURL = `api`;
+  }else{
+    axios.defaults.baseURL = "http://localhost:5000/api";
+  }
 }

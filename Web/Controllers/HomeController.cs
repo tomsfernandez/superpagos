@@ -8,10 +8,5 @@ namespace Web.Controllers {
         public IActionResult Get() {
             return Ok("Welcome to the Superpagos API");
         }
-
-        [HttpGet("")]
-        public IActionResult Index() {
-            return View();
-        }
     }
 }

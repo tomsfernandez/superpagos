@@ -34,7 +34,7 @@ services:
 networks:
   default:
     external:
-      name: superpagos_network
+      name: superpagos_test_network
 
 volumes:
   superpagos_data_test:

@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Swashbuckle.AspNetCore.Swagger;
+using VueCliMiddleware;
 using Web.Extensions;
 using Web.Model;
 using Web.Model.Domain;
@@ -83,6 +84,7 @@ namespace Web {
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "Superpagos API", Version = "v1"}); });
             services.AddWebSocketCache();
             services.AddTransient<ClaimExtractorFactory>(provider => new RealClaimExtractorFactory());
+            /*services.AddSpaStaticFiles(configuration => { configuration.RootPath = "WebApp/dist"; });*/ 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
