@@ -75,7 +75,15 @@ services:
       POSTGRES_DB: hangfire
       POSTGRES_HOST: postgres_hangfire
     volumes:
-    - hangfire_data:/var/lib/postgresql/data  
+    - hangfire_data:/var/lib/postgresql/data 
+
+    e2e:
+      image: e2e
+      container_name: "e2e"
+      build:
+        context: .
+        dockerfile: Dockerfile.cypress
+      env_file: .env
     
 networks:
   default:

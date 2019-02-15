@@ -1,0 +1,7 @@
+FROM cypress/browsers:chrome67
+WORKDIR ./app
+
+COPY ./Web/WebApp/cypress.json ./
+COPY ./Web/WebApp/tests/e2e ./e2e
+RUN $(npm bin)/cypress verify
+ENTRYPOINT ["./node_modules/.bin/cypress", "run"]
