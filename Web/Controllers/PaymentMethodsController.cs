@@ -94,10 +94,7 @@ namespace Web.Controllers {
             var userId = GetIdFromToken();
             if(!Context.Users.Any(x => x.Id.Equals(userId))) 
                 errors.Add($"User with id {userId} doesnt exist");
-            if(!Context.Providers.Any(x => x.Code.Equals(payload.ProviderCode)))
-                errors.Add($"Provider with code {payload.ProviderCode} doesnt exist");
-            if(string.IsNullOrEmpty(payload.OperationTokenFromProvider))
-                errors.Add("The Operation Token is null or empty");
+            errors.AddRange(payload.Validate(Context));
             return errors;
         }
 
