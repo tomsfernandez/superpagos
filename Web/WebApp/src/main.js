@@ -2,8 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store/store'
-import axios from 'axios'
-import interceptorSetup from './interceptors';
+import axiosSetup from './interceptors';
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,9 +15,8 @@ import { DataSourceInstaller } from "@progress/kendo-datasource-vue-wrapper";
 Vue.use(GridInstaller);
 Vue.use(DataSourceInstaller);
 
-axios.defaults.baseURL = "http://localhost:5000/api";
 Vue.config.productionTip = false;
-interceptorSetup();
+axiosSetup();
 
 new Vue({
   router,

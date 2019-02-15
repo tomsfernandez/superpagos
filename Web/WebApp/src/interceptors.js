@@ -23,5 +23,9 @@ export default function setup(){
 		return Promise.reject(error);
 	})
   
-  axios.defaults.baseURL = process.env.VUE_APP_BASE_URL
+  if (process.env.NODE_ENV === 'production') {
+    axios.defaults.baseURL = `${process.env.VUE_APP_BASE_URL}/api`;
+  }else{
+    axios.defaults.baseURL = "http://localhost:5000/api";
+  }
 }
