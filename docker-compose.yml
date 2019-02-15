@@ -2,8 +2,8 @@ version: '3.3'
 
 services:
   web:
-    image: superpagos_api
-    container_name: 'superpagos_api'
+    image: web
+    container_name: 'web'
     build:
       context: .
       dockerfile: Dockerfile.node.netcore
@@ -11,7 +11,7 @@ services:
         PROJECT_NAME: Web
     ports:
       - "80:5000"
-      - "5000:5000"
+      - "5750:5000"
     environment:
       DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
     env_file:
