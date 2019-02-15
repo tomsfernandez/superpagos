@@ -99,7 +99,7 @@ services:
       dockerfile: Dockerfile.cypress
     environment:
       CYPRESS_baseUrl: http://web
-      CYPRESS_EXTERNAL_API: http://web
+      CYPRESS_EXTERNAL_API: http://api:5000
     env_file: .env
     
 networks:
