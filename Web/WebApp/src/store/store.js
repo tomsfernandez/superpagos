@@ -105,11 +105,11 @@ export default new Vuex.Store({
             state.transactionId = id;
         },
         setPollingInterval(state, interval){
-            state.interval = interval;
+            state.pollInterval = interval;
         },
         stopPollingInterval(state){
             const interval = state.interval;
-            state.interval = {};
+            state.pollInterval = {};
             clearInterval(interval);
         }
     },
@@ -199,11 +199,11 @@ export default new Vuex.Store({
                 }, 1000);
                 commit("setPollingInterval", interval);
               setTimeout(() => {
-                if(state.interval !== null){
+                if(state.pollInterval !== {}){
                   commit("stopPollingInterval");
                   commit("errorTransaction");
                 }
-              }, 5000);
+              }, 10000);
             }catch (e) {
                 console.log(e);
             }
