@@ -7,7 +7,7 @@
 		<kendo-grid-column :field="'company'" :title="'Proveedor'"></kendo-grid-column>
 		<kendo-grid-column :field="'code'" :title="'Código'"></kendo-grid-column>
 		<kendo-grid-column :field="'paymentEndpoint'" :title="'Endpoint de pago'"></kendo-grid-column>
-		<kendo-grid-column :field="'rollbackEndPoint'" :title="'Endpoint de devolución'"></kendo-grid-column>
+		<kendo-grid-column :field="'rollbackEndpoint'" :title="'Endpoint de devolución'"></kendo-grid-column>
 		<kendo-grid-column :field="'linkEndpoint'" :title="'Endpoint de asociación'"></kendo-grid-column>
 		<kendo-grid-column :command="{ text: 'Borrar', click: startProviderDelete }"
 		                   :title="'&nbsp;'"

@@ -14,7 +14,6 @@ namespace VisaApi.Controllers
     [ApiController]
     public class VisaController : ControllerBase
     {
-        // TODO pegarle a este controller, ¿web y paymentmethodPayload para crear?   
         private IConfiguration Configuration { get; }
         private string ProviderToken { get; }
         
