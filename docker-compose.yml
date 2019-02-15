@@ -85,7 +85,7 @@ services:
       dockerfile: Dockerfile.cypress
     environment:
       CYPRESS_baseUrl: http://web
-      EXTERNAL_API: http://web
+      CYPRESS_EXTERNAL_API: http://web
     env_file: .env
     
 networks:
