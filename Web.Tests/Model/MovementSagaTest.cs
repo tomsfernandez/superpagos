@@ -11,7 +11,7 @@ using Web.Tests.Service;
 using Xunit;
 
 namespace Web.Tests.Model {
-    public class SagaTest : IDisposable{
+    public class SagaTest : IDisposable, IClassFixture<DatabaseFixture> {
 
         public MovementSaga Saga { get; }
         public AppDbContext Context { get; }
@@ -19,8 +19,8 @@ namespace Web.Tests.Model {
         public string FailedToken { get; } = "FailedToken";
         public string GoodToken { get; } = "GoodToken";
 
-        public SagaTest() {
-            Context = TestHelper.MakeContext();
+        public SagaTest(DatabaseFixture fixture) {
+            Context = fixture.DatabaseContext;
             Factory = new StubProviderApiFactory {
                 OnPayment = dto => dto.Token.Equals(FailedToken) ? throw new Exception() : new OkObjectResult("OK"),
                 OnRollback = dto => new OkObjectResult("OK")
@@ -67,7 +67,7 @@ namespace Web.Tests.Model {
         }
 
         public void Dispose() {
-            Context.Database.EnsureDeleted();
+            Context.Movements.DeleteFromQuery();
         }
     }
 }

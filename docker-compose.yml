@@ -51,6 +51,7 @@ services:
     - "8080:5000"
     environment:
       HangfireConnection: Server=postgres_hangfire;Database=hangfire;User Id=sa;Password=password;Port=5432;
+      SuperpagosHealthBase: http://api
     env_file: .env
     restart: unless-stopped
     healthcheck:

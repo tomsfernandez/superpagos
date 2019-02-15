@@ -21,7 +21,7 @@ namespace Scheduler {
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://*:5000")
+                .UseUrls("http://*:8080")
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseSetting("detailedErrors", "true")

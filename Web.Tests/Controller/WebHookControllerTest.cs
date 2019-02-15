@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Web.Controllers;
 using Web.Dto;
+using Web.Model.Domain;
 using Web.Service.Provider;
 using Web.Tests.Helpers;
 using Web.Tests.Service;
@@ -12,15 +14,15 @@ using Xunit;
 using Transaction = Web.Model.Domain.Transaction;
 
 namespace Web.Tests.Controller {
-    public class WebHookControllerTest : IDisposable{
+    public class WebHookControllerTest : IDisposable, IClassFixture<DatabaseFixture> {
         
         private WebHookController Controller { get; set; }
         private AppDbContext Context { get; set; }
         private ProviderApiFactory Factory { get; set; }
         private Transaction Transaction { get; set; }
 
-        public WebHookControllerTest() {
-            Context = GetContext();
+        public WebHookControllerTest(DatabaseFixture fixture) {
+            Context = fixture.DatabaseContext;
             Factory = new StubProviderApiFactory {
                 OnRollback = dto => new OkObjectResult("OK")
             };
@@ -76,7 +78,12 @@ namespace Web.Tests.Controller {
         }
 
         public void Dispose() {
-            Context.Database.EnsureDeleted();
+            var transactions = Context.Transactions.ToList();
+            transactions.ForEach(x => x.Movements =  new List<Movement>{});
+            Context.Transactions.UpdateRange(transactions);
+            Context.SaveChanges();
+            Context.Movements.DeleteFromQuery();
+            Context.Transactions.DeleteFromQuery();
         }
     }
 }

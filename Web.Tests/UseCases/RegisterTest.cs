@@ -15,7 +15,7 @@ using Web.Tests.Helpers;
 using Xunit;
 
 namespace Web.Tests.UseCases {
-    public class RegisterTest : IDisposable{
+    public class RegisterTest : IDisposable, IClassFixture<DatabaseFixture> {
 
         private AppDbContext Context { get; }
         private UsersController Controller { get; }
@@ -23,8 +23,8 @@ namespace Web.Tests.UseCases {
         private UserDto Jaimito { get; }
         private IConfiguration Config { get; } = Startup.Configuration;
 
-        public RegisterTest() {
-            Context = TestHelper.MakeContext();
+        public RegisterTest(DatabaseFixture fixture) {
+            Context = fixture.DatabaseContext;
             Mapper = TestHelper.CreateAutoMapper();
             Controller = new UsersController(Context, Mapper, Config, new SameClaimExtractorFactory(new List<Claim>()));
             Jaimito = UserFactory.GetJaimitoAsDto();
@@ -76,7 +76,7 @@ namespace Web.Tests.UseCases {
         }
 
         public void Dispose() {
-            Context.Database.EnsureDeleted();
+            Context.Users.DeleteFromQuery();
         }
     }
 }

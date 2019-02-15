@@ -19,7 +19,7 @@ using Xunit;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Web.Tests.UseCases {
-    public class PasswordRecoveryTest : IDisposable{
+    public class PasswordRecoveryTest : IDisposable, IClassFixture<DatabaseFixture> {
 
         private UsersController UsersController { get; }
         private PasswordRecoveryController RecoveryController { get; }
@@ -30,8 +30,8 @@ namespace Web.Tests.UseCases {
         private IConfiguration Config { get; } = Startup.Configuration;
         private EmailSender EmailSender { get; }
 
-        public PasswordRecoveryTest() {
-            Context = TestHelper.MakeContext();
+        public PasswordRecoveryTest(DatabaseFixture fixture) {
+            Context = fixture.DatabaseContext;
             Mapper = TestHelper.CreateAutoMapper();
             UsersController = new UsersController(Context, Mapper, Config, 
                 new SameClaimExtractorFactory(new List<Claim>()));
@@ -100,7 +100,7 @@ namespace Web.Tests.UseCases {
         }
 
         public void Dispose() {
-            Context.Database.EnsureDeleted();
+            Context.Users.DeleteFromQuery();
         }
     }
 }

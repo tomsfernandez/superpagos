@@ -22,7 +22,7 @@ using Xunit;
 using ProviderFactory = Web.Tests.Helpers.ProviderFactory;
 
 namespace Web.Tests.UseCases {
-    public class PaymentMethodLinkingTest : IDisposable{
+    public class PaymentMethodLinkingTest : IDisposable, IClassFixture<DatabaseFixture> {
         
         private Provider VisaProvider { get; }
         private string VisaProviderToken { get; }
@@ -32,10 +32,10 @@ namespace Web.Tests.UseCases {
         private ProviderApiFactory ApiFactory { get; }
         private PaymentMethodsController Controller { get; }
 
-        public PaymentMethodLinkingTest() {
+        public PaymentMethodLinkingTest(DatabaseFixture fixture) {
             Jaimito = UserFactory.GetJaimito();
             Configuration = Startup.Configuration;
-            Context = TestHelper.MakeContext();
+            Context = fixture.DatabaseContext;
             VisaProviderToken = Configuration["FakeProviderToken"];
             VisaProvider = ProviderFactory.GetVisa();
             ApiFactory = new StubProviderApiFactory {
@@ -83,7 +83,9 @@ namespace Web.Tests.UseCases {
         }
 
         public void Dispose() {
-            Context.Database.EnsureDeleted();
+            Context.PaymentMethods.DeleteFromQuery();
+            Context.Users.DeleteFromQuery();
+            Context.Providers.DeleteFromQuery();
         }
     }
 }
