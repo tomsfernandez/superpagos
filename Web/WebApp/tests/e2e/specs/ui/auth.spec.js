@@ -1,5 +1,3 @@
-import faker from "faker";
-
 describe('Auth Test with Server', () => {
 
   const credentials = {
@@ -7,10 +5,6 @@ describe('Auth Test with Server', () => {
     email: "Rodrick_Russel81@yahoo.com",
     password: "OAsudlZIUTckj"
   };
-  
-  before(() => {
-    cy.register(credentials);
-  });
 
   beforeEach(() => {
     cy.server();
@@ -23,7 +17,9 @@ describe('Auth Test with Server', () => {
   });
 
   it('logs in successfully and redirects to method view', () => {
-    cy.route('POST', `${Cypress.env('EXTERNAL_API')}/api/login`).as('login');
+    cy.fixture('logins.json', json => {
+      cy.route('POST', `${Cypress.env('EXTERNAL_API')}/api/login`, json.nonAdmin).as('login');  
+    });
     cy.visit('home/methods');
     cy.get('[data-cy=email]').clear().type(credentials.email);
     cy.get('[data-cy=password]').clear().type(credentials.password);
@@ -33,6 +29,9 @@ describe('Auth Test with Server', () => {
   });
   
   it('is redirected to login because Barney is not admin', () => {
+    cy.fixture('logins.json', json => {
+      cy.route('POST', `${Cypress.env('EXTERNAL_API')}/api/login`, json.admin).as('login');
+    });
     cy.login(credentials);
     cy.visit('/home');
     cy.url().should('contain', 'home');
@@ -41,6 +40,9 @@ describe('Auth Test with Server', () => {
   });
   
   it('is logged in, it logs out clicking the button and redirects to the login page', () => {
+    cy.fixture('logins.json', json => {
+      cy.route('POST', `${Cypress.env('EXTERNAL_API')}/api/login`, json.nonAdmin).as('login');
+    });
     cy.login(credentials);
     cy.visit('/home');
     cy.url().should('contain', 'home');
@@ -62,6 +64,9 @@ describe('Auth Test with Server', () => {
   
   it('is logged in, it logs out clicking the button, goes back with browser\'s history, navigates to payment ' +
       'methods therefore will be redirected to login page', () => {
+    cy.fixture('logins.json', json => {
+      cy.route('POST', `${Cypress.env('EXTERNAL_API')}/api/login`, json.admin).as('login');
+    });
     cy.login(credentials);
     cy.visit('/home');
     cy.url().should('contain', 'home');
@@ -71,8 +76,4 @@ describe('Auth Test with Server', () => {
     cy.visit('/home/methods');
     cy.url().should('contain', 'login')
   });
-  
-  after(() => {
-    cy.removeUser(credentials.email);
-  })
 });
