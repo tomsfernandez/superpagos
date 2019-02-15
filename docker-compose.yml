@@ -26,19 +26,19 @@ services:
       context: .
       dockerfile: Dockerfile.vue
     ports:
-      - "8080:80"
+      - "80:80"
     env_file:
       - .env
-    depends_on:
-      - reverse_proxy
-      
-  reverse_proxy:
-    image: nginx:stable-alpine
-    container_name: "reverse_proxy"
-    ports:
-       - "80:80"
     volumes:
       - ./conf.nginx:/etc/nginx/nginx.conf:ro
+      
+#  reverse_proxy:
+#    image: nginx:stable-alpine
+#    container_name: "reverse_proxy"
+#    ports:
+#       - "80:80"
+#    volumes:
+#      - ./conf.nginx:/etc/nginx/nginx.conf:ro
       
   scheduler:
     image: scheduler
