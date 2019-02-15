@@ -13,7 +13,7 @@ services:
       - "80:5000"
       - "5000:5000"
     environment:
-      DefaultConnection: Server=postgres;Database=hangfire;User Id=sa;Password=password;Port=5432;
+      DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
     env_file:
       - .env
       
