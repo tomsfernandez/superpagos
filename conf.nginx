@@ -6,6 +6,10 @@ http {
     server {
         listen 80;
         
+        location / {
+            root
+        }
+        
         location /api {
             proxy_pass http://api:5000;
         }
