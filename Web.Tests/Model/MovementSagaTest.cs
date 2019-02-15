@@ -29,11 +29,11 @@ namespace Web.Tests.Model {
         }
 
         [Fact]
-        public void test_01_all_movements_succeed() {
+        public void test_01_all_movements_succeed_in_first_setp() {
             var movements = new List<Movement>{GetSuccesfullMovement(), GetSuccesfullMovement()};
             Saga.Start(movements).Should().BeTrue();
-            movements.Select(x => x.InProcess).Should().AllBeEquivalentTo(false);
-            movements.Select(x => x.IsSuccesfull).Should().AllBeEquivalentTo(true);
+            movements.Select(x => x.InProcess).Should().AllBeEquivalentTo(true);
+            movements.Select(x => x.IsSuccesfull).Should().AllBeEquivalentTo(false);
         }
 
         [Fact]

@@ -38,22 +38,8 @@ namespace Web.Tests.Controller {
             Transaction.Movements[0].IsRollback.Should().BeFalse();
         }
 
-        [Fact(Skip = "asdasd")]
-        public void test_02_all_movement_are_succesfull_so_websocket_is_closed() {
-            var operationId = Transaction.Movements[0].OperationId;
-            var response = PaymentResponseFactory.GetSuccesfullResponse(operationId);
-            CheckResponseIs(response, 200);
-            operationId = Transaction.Movements[1].OperationId;
-            response = PaymentResponseFactory.GetSuccesfullResponse(operationId);
-            CheckResponseIs(response, 200);
-            Transaction.Movements.Select(x => x.IsSuccesfull).Should().AllBeEquivalentTo(true);
-            Transaction.Movements.Select(x => x.InProcess).Should().AllBeEquivalentTo(false);
-            Transaction.Movements.Select(x => x.IsRollback).Should().AllBeEquivalentTo(false);
-            false.Should().BeTrue();
-        }
-
         [Fact]
-        public void test_03_first_movement_is_error_so_transaction_rollbacks() {
+        public void test_02_first_movement_is_error_so_transaction_rollbacks() {
             var operationId = Transaction.Movements[0].OperationId;
             var response = PaymentResponseFactory.GetFailedResponse(operationId);
             CheckResponseIs(response, 200);
@@ -62,7 +48,7 @@ namespace Web.Tests.Controller {
         }
 
         [Fact]
-        public void test_04_second_movement_is_error_so_transaction_rollbacks() {
+        public void test_03_second_movement_is_error_so_transaction_rollbacks() {
             var operationId = Transaction.Movements[1].OperationId;
             var response = PaymentResponseFactory.GetFailedResponse(operationId);
             CheckResponseIs(response, 200);
