@@ -31,27 +31,42 @@ Cypress.Commands.add("register", credentials => cy.request('POST', `${Cypress.en
 Cypress.Commands.add("login", credentials => withStore(s => s.dispatch("login", credentials)));
 Cypress.Commands.add("deleteMyself", () => withStore(s => s.dispatch("deleteMyself")));
 Cypress.Commands.add("removeUser", (email) => cy.request({
-  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteUser/${email}`, 
-  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+    url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteUser/${email}`,
+    headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
 }));
 Cypress.Commands.add("logout", () => withStore(s => s.dispatch("logout")));
 Cypress.Commands.add("addProvider", () => cy.request({
-  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/addProvider`, 
-  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+    url: `${Cypress.env('EXTERNAL_API')}/api/cypress/addProvider`,
+    headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
 }));
 Cypress.Commands.add("removeProvider", () => cy.request({
-  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteProvider`, 
-  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+    url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteProvider`,
+    headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
 }));
 Cypress.Commands.add("addMovements", (email) => cy.request({
-  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/addMovements/${email}`,
-  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')} 
+    url: `${Cypress.env('EXTERNAL_API')}/api/cypress/addMovements/${email}`,
+    headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
 }));
 Cypress.Commands.add("removeMovements", (email) => cy.request({
-  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/removeMovements/${email}`,
-  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+    url: `${Cypress.env('EXTERNAL_API')}/api/cypress/removeMovements/${email}`,
+    headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
 }));
 Cypress.Commands.add("removeAllMethodsFromUser", (email) => cy.request({
-  url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteAllFromUser/${email}`, 
-  headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+    url: `${Cypress.env('EXTERNAL_API')}/api/cypress/deleteAllFromUser/${email}`,
+    headers: {CYPRESS_TOKEN: Cypress.env('CYPRESS_TOKEN')}
+}));
+Cypress.Commands.add("getEmailText", () => cy.request({
+    url: 'https://mailtrap.io/api/v1/inboxes/545397/messages',
+    headers: {"Api-Token": "884c4fc8e348575008f086c496d520e0"}
+}).then((response) => {
+    let emailId = response.body[0].id;
+    cy.request({
+        url: `https://mailtrap.io/api/v1/inboxes/545397/messages/${emailId}/body.txt`,
+        headers: {"Api-Token": "884c4fc8e348575008f086c496d520e0"}
+    }).then((response) => response.body);
+}));
+Cypress.Commands.add("cleanInbox", () => cy.request({
+    method: 'PATCH',
+    url: `https://mailtrap.io/api/v1/inboxes/545397/clean`,
+    headers: {"Api-Token": "884c4fc8e348575008f086c496d520e0"}
 }));

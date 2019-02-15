@@ -1,7 +1,7 @@
 <template>
     <div class="col-sm-6">
         <div class="jumbotron superpagos-password-recovery">
-            <Messages :success-msgs="msgs" :errors="errors" data-cy="messages"></Messages>
+            <Messages :success-msgs="msgs" data-cy="messages"></Messages>
             <form @submit="send">
                 <div class="form-group">
                     <label class="" for="emailInput">Email</label>
@@ -32,20 +32,14 @@
                 resetPasswordRequest: {
                     email: ""
                 },
-                msgs: [],
-                errors: []
+                msgs: []
             }
         },
         methods: {
             send: function (event) {
                 event.preventDefault();
                 api.sendResetPasswordRequest(this.resetPasswordRequest)
-                    .then((res) => {
-                        if (res.data === "")
-                            this.errors.push("El email ingresado no corresponde a ninguna cuenta existente.");
-                        else
-                            this.msgs.push("El email ha sido enviado.");
-                    });
+                    .then(() => this.msgs.push("El email ha sido enviado."));
             },
             goToLogin: function () {
                 this.$router.push("/login");
