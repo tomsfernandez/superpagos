@@ -5,7 +5,7 @@ ENV PROJECT_NAME ${PROJECT_NAME}
 WORKDIR /app
 COPY . .
 
-RUN cd ${PROJECT_NAME}/WebApp && npm install vue-cli && npm install --production && npm run build 
+RUN cd ${PROJECT_NAME}/WebApp && npm install vue-cli --production && npm install --production && npm run build 
 
 RUN cd ${PROJECT_NAME}/ && dotnet clean && dotnet publish -c Release -o /app/out
 
