@@ -24,7 +24,7 @@ export default function setup(){
 	})
   
   if (process.env.NODE_ENV === 'production') {
-    axios.defaults.baseURL = `http://localhost:8080/api`;
+    axios.defaults.baseURL = `http://34.231.138.193:8080/api`;
   }else{
     axios.defaults.baseURL = "http://localhost:5000/api";
   }
