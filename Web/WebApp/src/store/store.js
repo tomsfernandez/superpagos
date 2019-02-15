@@ -187,7 +187,7 @@ export default new Vuex.Store({
                 console.log(e);
             }
         },
-        async pollPayment({commit}, transactionId){
+        async pollPayment({commit, state}, transactionId){
             try{
                 const interval = setInterval(async () => {
                     const {data} = await api.pollInterval(transactionId);
@@ -198,6 +198,12 @@ export default new Vuex.Store({
                     else if (data.success) commit("finishTransaction");
                 }, 1000);
                 commit("setPollingInterval", interval);
+              setTimeout(() => {
+                if(state.interval !== null){
+                  commit("stopPollingInterval");
+                  commit("errorTransaction");
+                }
+              }, 5000);
             }catch (e) {
                 console.log(e);
             }
