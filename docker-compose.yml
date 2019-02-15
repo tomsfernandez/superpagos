@@ -19,6 +19,17 @@ services:
       - .env
 #    depends_on:
 #    - reverse_proxy
+      
+  visa_api:
+    image: visa_api
+    container_name: 'visa_api'
+    build:
+      context: .
+      dockerfile: Dockerfile.netcore
+      args:
+        PROJECT_NAME: VisaApi
+    env_file:
+      - .env
        
   web:
     image: web

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -17,6 +17,9 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL">
           <Version>2.1.2</Version>
+        </PackageReference>
+        <PackageReference Include="Refit">
+          <Version>4.6.58</Version>
         </PackageReference>
     </ItemGroup>
 

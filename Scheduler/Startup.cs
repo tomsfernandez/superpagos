@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +33,9 @@ namespace Scheduler {
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+//                .AddApplicationPart(typeof(FakeSuperpagosController).Assembly)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);            
             var connectionString = Configuration.GetConnectionString("HangfireConnection");
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<DbCreatorContext>().UseNpgsql(connectionString);
             using(var context = new DbCreatorContext(dbContextOptionsBuilder.Options))
@@ -58,6 +56,9 @@ namespace Scheduler {
 
             app.UseHangfireDashboard("");
             app.UseHangfireServer();
+            
+//            var api = RestService.For<ISuperpagosApi>(Configuration["FakeSuperpagosEndpoint"]);
+            BackgroundJob.Enqueue( () => Console.WriteLine("HOLASASDOIAHODFINSOI"));
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
