@@ -7,7 +7,7 @@ http {
         listen 80;
         
         location / {
-            root
+            index index.html
         }
         
         location /api {
