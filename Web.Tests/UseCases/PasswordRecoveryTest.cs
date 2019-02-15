@@ -61,11 +61,9 @@ namespace Web.Tests.UseCases {
         public async void test_02_that_non_existant_email_returns_ok_without_url() {
             await RegisterJaimito();
             var resetToken = new ResetTokenDto {Email = "aDifferentEmail@hotmail.com"};
-            var result = await RecoveryController.SendResetToken(resetToken) as OkObjectResult;
+            var result = await RecoveryController.SendResetToken(resetToken) as OkResult;
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(200);
-            var url = result.Value as string;
-            url.Should().BeNullOrEmpty();
         }
 
         [Fact]

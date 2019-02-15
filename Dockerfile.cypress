@@ -1,0 +1,8 @@
+FROM cypress/browsers:chrome67
+WORKDIR ./app
+RUN npm install --save-dev cypress faker
+
+COPY ./Web/WebApp/cypress.json ./
+COPY ./Web/WebApp/tests ./tests
+RUN $(npm bin)/cypress verify
+ENTRYPOINT ["./node_modules/.bin/cypress", "run"]

@@ -1,17 +1,19 @@
 version: '3.3'
 
 services:
-  api:
-    image: superpagos_api
-    container_name: 'superpagos_api'
+  web:
+    image: web
+    container_name: 'web'
     build:
       context: .
-      dockerfile: Dockerfile.netcore
+      dockerfile: Dockerfile.node.netcore
       args:
         PROJECT_NAME: Web
     ports:
       - "80:5000"
-      - "5000:5000"
+      - "5750:5000"
+    environment:
+      DefaultConnection: Server=postgres;Database=superpagos;User Id=sa;Password=password;Port=5432;
     env_file:
       - .env
       
@@ -27,7 +29,7 @@ services:
     ports:
     - "8080:5000"
     environment:
-      HangfireConnection: Server=postgres;Database=hangfire;User Id=sa;Password=password;Port=5432;
+      HangfireConnection: Server=postgres_hangfire;Database=hangfire;User Id=sa;Password=password;Port=5432;
     env_file: .env
     restart: unless-stopped
     healthcheck:
@@ -37,8 +39,8 @@ services:
       retries: 3
 
   migrations:
-    image: api_migrations
-    container_name: "api_migrations"
+    image: web_migrations
+    container_name: "web_migrations"
     build:
       context: .
       dockerfile: Dockerfile.migrations
@@ -73,7 +75,18 @@ services:
       POSTGRES_DB: hangfire
       POSTGRES_HOST: postgres_hangfire
     volumes:
-    - hangfire_data:/var/lib/postgresql/data  
+    - hangfire_data:/var/lib/postgresql/data 
+
+  e2e:
+    image: e2e
+    container_name: "e2e"
+    build:
+      context: .
+      dockerfile: Dockerfile.cypress
+    environment:
+      CYPRESS_baseUrl: http://web
+      CYPRESS_EXTERNAL_API: http://web
+    env_file: .env
     
 networks:
   default:

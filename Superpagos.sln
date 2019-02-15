@@ -17,6 +17,8 @@ ProjectSection(SolutionItems) = preProject
 	run-ci.sh = run-ci.sh
 	Dockerfile.migrations = Dockerfile.migrations
 	.dockerignore = .dockerignore
+	Dockerfile.node.netcore = Dockerfile.node.netcore
+	Dockerfile.cypress = Dockerfile.cypress
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Tests", "Web.Tests\Web.Tests.csproj", "{37A154B8-BE1B-4F89-A8AB-B0F535E06496}"

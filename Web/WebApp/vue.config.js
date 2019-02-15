@@ -1,5 +1,5 @@
 module.exports = {
 	runtimeCompiler: true,
-	indexPath: "../Views/Index.cshtml",
+	indexPath: "../Views/Home/Index.cshtml",
 	outputDir: "../wwwroot"
 };

@@ -40,25 +40,22 @@ describe('Payment Test with Server', () => {
 
 describe('Payment UI tests', () => {
 
+  const status = {success: false, failure: false, inProcess: true};
+  const succesfullResult = {success: true, failure: false, inProcess: false};
+  const transactionId = 11;
+  
   beforeEach(() => {
     cy.server();
     cy.visit('/login');
-    // create two users
-    // create providers
-    // create payment methods
-    cy.removeUser(credentials.email);
-    cy.register(credentials);
+    cy.fixture('logins.json').then(json => {
+      cy.route('POST', `${Cypress.env('EXTERNAL_API')}/api/login`, json.nonAdmin)
+    });
     cy.login(credentials);
   });
 
   it('attemps several requests before receiving confirmation', () => {
-
-    const transactionId = 11;
-    let status = {success: false, failure: false, inProcess: true};
-    let succesfullResult = {success: true, failure: false, inProcess: false};
     cy.route('GET', `${Cypress.env('EXTERNAL_API')}/api/PaymentMethods`, 'fixture:methods.json').as('methods');
     cy.route('POST',`${Cypress.env('EXTERNAL_API')}/api/Payment`, transactionId);
-    
     cy.route('GET', `${Cypress.env('EXTERNAL_API')}/api/Movements/state/${transactionId}`, status).as('statusCheck');
     cy.visit('home/payment/4');
     cy.get('[data-cy=methods]').select('Visa');
@@ -66,8 +63,8 @@ describe('Payment UI tests', () => {
     cy.get('[data-cy=submit]').click();
     cy.get('[data-cy=loader]').should('be.visible');
     cy.wait('@statusCheck');
-    cy.route('GET', `${Cypress.env('EXTERNAL_API')}/api/Movements/state/${transactionId}`, succesfullResult).as('succesfullCheck');
-    cy.wait('@succesfullCheck');
+    cy.route('GET', `${Cypress.env('EXTERNAL_API')}/api/Movements/state/${11}`, succesfullResult).as('successfulCheck');
+    cy.wait('@successfulCheck');
     cy.get('[data-cy=payment-success]').should('be.visible');
   });
   
