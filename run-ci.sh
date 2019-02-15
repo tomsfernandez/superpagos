@@ -1,5 +1,5 @@
 #!/bin/bash
-docker network create superpagos_network
+docker network create superpagos_test_network
 docker-compose -f docker-compose.test.yml up -d postgres_ci
 docker-compose -f docker-compose.test.yml build api_ci 
 docker-compose -f docker-compose.test.yml run api_ci 

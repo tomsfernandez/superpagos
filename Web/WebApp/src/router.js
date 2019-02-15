@@ -16,7 +16,6 @@ import PasswordRecovery from "./components/PasswordRecovery";
 Vue.use(Router);
 
 const router = new Router({
-  mode: 'history',
   routes: [
     {path: '/', name: 'landing', redirect: 'login', component: Landing,
     children: [
