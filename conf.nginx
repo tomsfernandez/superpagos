@@ -5,9 +5,10 @@ events {
 http {
     server {
         listen 80;
+        root /usr/share/nginx/html;
         
         location / {
-            return /usr/share/nginx/html/index.html;
+            
         }
         
         location /api {
